@@ -9,10 +9,8 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
 
     <script>
       tailwind.config = {
@@ -20,6 +18,7 @@
           extend: {
             fontFamily: {
               sans: ["Outfit", "sans-serif"],
+              cairo: ["Cairo", "sans-serif"],
             },
             colors: {
               brand: {
@@ -98,6 +97,10 @@
       role="main"
       aria-label="Team Portfolio Carousel"
     >
+      <!-- Language Toggle Button -->
+      <button id="lang-btn" onclick="toggleLanguage()" class="absolute top-6 right-6 z-50 px-5 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-sm font-bold text-white hover:bg-white/20 transition-all font-cairo shadow-lg">
+        العربية
+      </button>
       <!-- Background Elements (Decorative) -->
       <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <div
@@ -171,51 +174,61 @@
     <!-- JavaScript Logic -->
     <script>
       // Team Data
+      // Team Data (Simulated DB)
       const teamMembers = [
         {
           name: "Mohammed Hashim",
+          nameAr: "محمد هاشم",
           role: "Team Leader",
+          roleAr: "قائد الفريق",
           bio: "Visionary leader with a passion for innovative solutions and team synergy. Expert in strategic planning and full-stack architecture.",
-          skills: [
-            "Leadership",
-            "Project Management",
-            "System Architecture",
-            "React/Node",
-          ],
+          bioAr: "قائد صاحب رؤية شغوف بالحلول المبتكرة وتآزر الفريق. خبير في التخطيط الاستراتيجي وهندسة البرمجيات المتكاملة.",
+          skills: ["Leadership", "Project Management", "System Architecture", "React/Node"],
+          skillsAr: ["القيادة", "إدارة المشاريع", "هندسة الأنظمة", "React/Node"],
           social: ["twitter", "linkedin", "github"],
           image: "./Team_Images/Leader_Image-removebg-preview.png",
         },
         {
           name: "Ahmed Albtati",
+          nameAr: "أحمد البطاطي",
           role: "Team Member",
+          roleAr: "عضو الفريق",
           bio: "Creative frontend developer focused on crafting immersive user experiences. Specialist in responsive design and accessibility.",
+          bioAr: "مطور واجهات أمامية مبدع يركز على صياغة تجارب مستخدم غامرة. متخصص في التصميم المتجاوب وإمكانية الوصول.",
           skills: ["Frontend Dev", "UI/UX Design", "Three.js", "Accessibility"],
+          skillsAr: ["تطوير الواجهات", "تصميم UI/UX", "Three.js", "إمكانية الوصول"],
           social: ["linkedin", "dribbble"],
-          image:
-            "https://ui-avatars.com/api/?name=Ahmed+Albtati&background=8b5cf6&color=fff&size=512&font-size=0.33",
+          image: "https://ui-avatars.com/api/?name=Ahmed+Albtati&background=8b5cf6&color=fff&size=512&font-size=0.33",
         },
         {
           name: "Khaled Bin Mahfouz",
+          nameAr: "خالد بن محفوظ",
           role: "Team Member",
+          roleAr: "عضو الفريق",
           bio: "Detail-oriented backend engineer ensuring robust and scalable server-side operations. Loves database optimization and cloud infrastructure.",
+          bioAr: "مهندس واجهات خلفية دقيق يضمن عمليات خادم قوية وقابلة للتطوير. محب لتحسين قواعد البيانات والبنية التحتية السحابية.",
           skills: ["Backend Dev", "Database Design", "AWS", "Python"],
+          skillsAr: ["تطوير الخلفية", "تصميم قواعد البيانات", "AWS", "Python"],
           social: ["github", "linkedin"],
-          image:
-            "https://ui-avatars.com/api/?name=Khaled+Bin+Mahfouz&background=10b981&color=fff&size=512&font-size=0.33",
+          image: "https://ui-avatars.com/api/?name=Khaled+Bin+Mahfouz&background=10b981&color=fff&size=512&font-size=0.33",
         },
         {
           name: "Khallad Ghanem",
+          nameAr: "خلاد غانم",
           role: "Team Member",
+          roleAr: "عضو الفريق",
           bio: "Full-stack developer with a knack for solving complex algorithmic problems. Drives the technical core of our applications.",
+          bioAr: "مطور شامل لديه موهبة في حل المشكلات الخوارزمية المعقدة. يقود النواة التقنية لتطبيقاتنا.",
           skills: ["Full Stack", "Algorithms", "DevOps", "Java"],
+          skillsAr: ["تطوير شامل", "الخوارزميات", "DevOps", "Java"],
           social: ["github", "twitter"],
-          image:
-            "https://ui-avatars.com/api/?name=Khallad+Ghanem&background=f59e0b&color=fff&size=512&font-size=0.33",
+          image: "https://ui-avatars.com/api/?name=Khallad+Ghanem&background=f59e0b&color=fff&size=512&font-size=0.33",
         },
       ];
 
       // State & Config
       let currentIndex = 0;
+      let currentLang = 'en';
       const totalSlides = teamMembers.length;
 
       // DOM Elements
@@ -223,19 +236,57 @@
       const paginationContainer = document.getElementById("pagination");
       const prevBtn = document.getElementById("prev-btn");
       const nextBtn = document.getElementById("next-btn");
+      const langBtn = document.getElementById("lang-btn");
+
+      // Toggle Language
+      function toggleLanguage() {
+        currentLang = currentLang === 'en' ? 'ar' : 'en';
+        
+        // Update Document Attributes
+        document.documentElement.lang = currentLang;
+        document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+
+        // Update Font
+        if (currentLang === 'ar') {
+            document.body.classList.remove('font-sans');
+            document.body.classList.add('font-cairo');
+            langBtn.innerText = "English";
+        } else {
+            document.body.classList.add('font-sans');
+            document.body.classList.remove('font-cairo');
+            langBtn.innerText = "العربية";
+        }
+
+        // Re-render content
+        renderSlides();
+        
+        // Restore active state
+        updateSlideClasses();
+      }
 
       // Render Slides
       function renderSlides() {
+        track.innerHTML = ""; // Clear existing
         teamMembers.forEach((member, index) => {
           const slide = document.createElement("article");
           slide.className = `min-w-full h-full flex flex-col md:flex-row items-center justify-center p-6 md:p-20 gap-8 md:gap-16 opacity-100 transition-opacity duration-300 slide-item`;
           slide.setAttribute("aria-hidden", index !== 0);
           slide.dataset.index = index;
 
-          // Alternate layout for variety (optional, keeping consistent for now as per "centered layout" request, but split view is nice)
-          // Using a split layout: Image Left/Top, Text Right/Bottom for desktop
+          // Localized Data
+          const name = currentLang === 'ar' ? member.nameAr : member.name;
+          const role = currentLang === 'ar' ? member.roleAr : member.role;
+          const bio = currentLang === 'ar' ? member.bioAr : member.bio;
+          const skills = currentLang === 'ar' ? member.skillsAr : member.skills;
+          const isRTL = currentLang === 'ar';
+
+          // For layout: In RTL mode, flex-row (no reverse) puts first child on Right.
+          // [Image, Text] -> Image Right, Text Left.
+          // This is usually correct.
+          // Text Alignment: need md:text-right or md:text-start. 
+          // Item alignment: md:items-start in Flex follows direction (Right in RTL).
+          
           slide.innerHTML = `
-                    <!-- Image Section -->
                     <!-- Pop-out Image Section -->
                     <div class="relative w-56 h-72 md:w-72 md:h-96 shrink-0 flex items-end justify-center slide-content-item delay-100 group">
                         
@@ -245,65 +296,56 @@
                         <!-- Circle Background -->
                         <div class="absolute bottom-0 w-full aspect-square rounded-full border-4 border-white/10 bg-gradient-to-b from-slate-700 to-slate-900 shadow-2xl group-hover:scale-105 transition-transform duration-500 ease-out"></div>
 
-                        <!-- Image (Popping out) -->
+                        <!-- Image -->
                         <img 
                             src="${member.image}" 
-                            alt="${member.name}" 
+                            alt="${name}" 
                             class="relative z-10 w-full h-[120%] object-cover object-top rounded-b-full drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)] group-hover:scale-105 transition-transform duration-500 ease-out origin-bottom"
                         >
                         
                         <!-- Badge/Counter -->
-                        <div class="absolute bottom-4 right-4 z-20 bg-white/10 backdrop-blur-md border border-white/20 p-2 rounded-xl text-xs font-mono text-brand-primary font-bold">
+                        <div class="absolute bottom-4 ${isRTL ? 'left-4' : 'right-4'} z-20 bg-white/10 backdrop-blur-md border border-white/20 p-2 rounded-xl text-xs font-mono text-brand-primary font-bold">
                             ${index + 1} / ${totalSlides}
                         </div>
                     </div>
 
                     <!-- Text Section -->
-                    <div class="flex flex-col items-center md:items-start text-center md:text-left max-w-2xl space-y-6">
+                    <div class="flex flex-col items-center md:items-start text-center ${isRTL ? 'md:text-right' : 'md:text-left'} max-w-2xl space-y-6">
                         
                         <!-- Role Badge -->
                         <span class="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-sm font-semibold tracking-wide uppercase text-brand-primary slide-content-item delay-200">
-                            ${member.role}
+                            ${role}
                         </span>
 
                         <!-- Name -->
                         <h1 class="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60 slide-content-item delay-300">
-                            ${member.name}
+                            ${name}
                         </h1>
 
                         <!-- Bio -->
                         <p class="text-lg text-slate-400 leading-relaxed slide-content-item delay-400">
-                            ${member.bio}
+                            ${bio}
                         </p>
 
                         <!-- Skills -->
-                        <div class="flex flex-wrap justify-center md:justify-start gap-2 slide-content-item delay-500">
-                            ${member.skills
-                              .map(
-                                (skill) => `
+                        <div class="flex flex-wrap justify-center ${isRTL ? 'md:justify-start' : 'md:justify-start'} gap-2 slide-content-item delay-500">
+                            ${skills.map(skill => `
                                 <span class="px-3 py-1 bg-slate-800/50 rounded-lg text-sm text-slate-300 hover:bg-brand-primary/20 hover:text-brand-primary transition-colors cursor-default border border-slate-700/50">
                                     ${skill}
                                 </span>
-                            `,
-                              )
-                              .join("")}
+                            `).join('')}
                         </div>
 
-                        <!-- Social Icons (Placeholder SVG) -->
+                        <!-- Social Icons -->
                         <div class="flex gap-4 pt-4 slide-content-item delay-500">
-                            ${member.social
-                              .map(
-                                (platform) => `
+                            ${member.social.map(platform => `
                                 <a href="#" class="p-2 bg-white/5 rounded-full hover:bg-white/20 hover:text-brand-primary transition-all duration-300 group" aria-label="${platform}">
                                     <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                                        <!-- Generic Icon for simplicity -->
                                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
                                         <circle cx="12" cy="12" r="3"/>
                                     </svg>
                                 </a>
-                            `,
-                              )
-                              .join("")}
+                            `).join('')}
                         </div>
                     </div>
                 `;
