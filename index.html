@@ -313,7 +313,10 @@
                     <div class="flex flex-col items-center md:items-start text-center ${isRTL ? 'md:text-right' : 'md:text-left'} max-w-2xl space-y-6">
                         
                         <!-- Role Badge -->
-                        <span class="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-sm font-semibold tracking-wide uppercase text-brand-primary slide-content-item delay-200">
+                        <span class="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-sm font-semibold tracking-wide uppercase text-brand-primary slide-content-item delay-200 hover:bg-white/10 focus:outline-none focus:ring-1 focus:ring-brand-primary transition-colors cursor-text"
+                              contenteditable="true"
+                              onblur="updateMemberRole(${index}, this.innerText)"
+                              title="Click to edit role">
                             ${role}
                         </span>
 
@@ -323,14 +326,20 @@
                         </h1>
 
                         <!-- Bio -->
-                        <p class="text-lg text-slate-400 leading-relaxed slide-content-item delay-400">
+                        <p class="text-lg text-slate-400 leading-relaxed slide-content-item delay-400 hover:bg-white/5 focus:outline-none focus:ring-1 focus:ring-brand-primary rounded transition-all cursor-text p-1 -mx-1"
+                           contenteditable="true"
+                           onblur="updateMemberBio(${index}, this.innerText)"
+                           title="Click to edit bio">
                             ${bio}
                         </p>
 
                         <!-- Skills -->
                         <div class="flex flex-wrap justify-center ${isRTL ? 'md:justify-start' : 'md:justify-start'} gap-2 slide-content-item delay-500">
-                            ${skills.map(skill => `
-                                <span class="px-3 py-1 bg-slate-800/50 rounded-lg text-sm text-slate-300 hover:bg-brand-primary/20 hover:text-brand-primary transition-colors cursor-default border border-slate-700/50">
+                            ${skills.map((skill, skillIdx) => `
+                                <span class="px-3 py-1 bg-slate-800/50 rounded-lg text-sm text-slate-300 hover:bg-brand-primary/20 hover:text-brand-primary transition-colors cursor-text border border-slate-700/50 focus:outline-none focus:ring-1 focus:ring-brand-primary"
+                                      contenteditable="true"
+                                      onblur="updateMemberSkill(${index}, ${skillIdx}, this.innerText)"
+                                      title="Click to edit skill">
                                     ${skill}
                                 </span>
                             `).join('')}
@@ -449,6 +458,31 @@
         if (touchEndX > touchStartX + threshold) {
           // Swiped Right
           goToSlide(currentIndex + (isRTL ? 1 : -1));
+        }
+      }
+
+      // Inline Editing Data Handlers
+      function updateMemberRole(memberIdx, newRole) {
+        if (currentLang === 'ar') {
+            teamMembers[memberIdx].roleAr = newRole.trim();
+        } else {
+            teamMembers[memberIdx].role = newRole.trim();
+        }
+      }
+
+      function updateMemberBio(memberIdx, newBio) {
+        if (currentLang === 'ar') {
+            teamMembers[memberIdx].bioAr = newBio.trim();
+        } else {
+            teamMembers[memberIdx].bio = newBio.trim();
+        }
+      }
+
+      function updateMemberSkill(memberIdx, skillIdx, newSkillText) {
+        if (currentLang === 'ar') {
+            teamMembers[memberIdx].skillsAr[skillIdx] = newSkillText.trim();
+        } else {
+            teamMembers[memberIdx].skills[skillIdx] = newSkillText.trim();
         }
       }
 
