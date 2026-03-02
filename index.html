@@ -165,7 +165,7 @@
       <!-- Pagination Indicators -->
       <div
         id="pagination"
-        class="absolute bottom-8 left-1/2 -translate-x-1/2 flex space-x-3 z-20"
+        class="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-20"
       >
         <!-- Dots injected by JS -->
       </div>
@@ -260,8 +260,8 @@
         // Re-render content
         renderSlides();
         
-        // Restore active state
-        updateSlideClasses();
+        // Restore position and active state
+        goToSlide(currentIndex);
       }
 
       // Render Slides
@@ -393,7 +393,8 @@
         if (index >= totalSlides) index = 0;
 
         currentIndex = index;
-        const translateX = currentIndex * -100;
+        const isRTL = document.documentElement.dir === 'rtl';
+        const translateX = currentIndex * (isRTL ? 100 : -100);
         track.style.transform = `translateX(${translateX}%)`;
 
         // Trigger animations
@@ -401,13 +402,20 @@
       }
 
       // Event Listeners
-      prevBtn.addEventListener("click", () => goToSlide(currentIndex - 1));
-      nextBtn.addEventListener("click", () => goToSlide(currentIndex + 1));
+      prevBtn.addEventListener("click", () => {
+        const isRTL = document.documentElement.dir === 'rtl';
+        goToSlide(currentIndex + (isRTL ? 1 : -1));
+      });
+      nextBtn.addEventListener("click", () => {
+        const isRTL = document.documentElement.dir === 'rtl';
+        goToSlide(currentIndex + (isRTL ? -1 : 1));
+      });
 
       // Keyboard Navigation
       document.addEventListener("keydown", (e) => {
-        if (e.key === "ArrowLeft") goToSlide(currentIndex - 1);
-        if (e.key === "ArrowRight") goToSlide(currentIndex + 1);
+        const isRTL = document.documentElement.dir === 'rtl';
+        if (e.key === "ArrowLeft") goToSlide(currentIndex + (isRTL ? 1 : -1));
+        if (e.key === "ArrowRight") goToSlide(currentIndex + (isRTL ? -1 : 1));
       });
 
       // Touch Navigation (Swipe)
@@ -432,14 +440,15 @@
       );
 
       function handleSwipe() {
+        const isRTL = document.documentElement.dir === 'rtl';
         const threshold = 50; // min swipe distance
         if (touchEndX < touchStartX - threshold) {
-          // Swiped Left -> Next
-          goToSlide(currentIndex + 1);
+          // Swiped Left
+          goToSlide(currentIndex + (isRTL ? -1 : 1));
         }
         if (touchEndX > touchStartX + threshold) {
-          // Swiped Right -> Prev
-          goToSlide(currentIndex - 1);
+          // Swiped Right
+          goToSlide(currentIndex + (isRTL ? 1 : -1));
         }
       }
 
