@@ -89,12 +89,11 @@
     </style>
   </head>
   <body
-    class="bg-brand-dark text-white font-sans overflow-hidden antialiased selection:bg-brand-primary selection:text-white"
+    class="bg-brand-dark text-white font-sans overflow-x-hidden antialiased selection:bg-brand-primary selection:text-white"
   >
-    <!-- Main Container -->
-    <main
+    <!-- Main Carousel Section -->
+    <section id="portfolio"
       class="relative h-screen w-full flex items-center justify-center overflow-hidden"
-      role="main"
       aria-label="Team Portfolio Carousel"
     >
       <!-- Top Right Controls -->
@@ -177,7 +176,29 @@
       >
         <!-- Dots injected by JS -->
       </div>
-    </main>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="min-h-screen w-full bg-brand-dark py-20 px-6 md:px-20 relative flex flex-col items-center justify-center border-t border-white/10 z-10">
+      <!-- Glow background -->
+      <div class="absolute top-0 right-0 w-[40%] h-[40%] bg-brand-accent/10 rounded-full blur-[100px] pointer-events-none"></div>
+      
+      <div class="relative z-10 w-full max-w-6xl mx-auto flex flex-col items-center">
+        <h2 id="services-title" class="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60 text-center">
+          Our Services
+        </h2>
+        <div id="services-subtitle" class="w-20 h-1 bg-brand-primary rounded-full mb-16"></div>
+        
+        <div id="services-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+          <!-- Services will be populated here -->
+        </div>
+
+        <!-- Back to Portfolio Button -->
+        <button onclick="document.getElementById('portfolio').scrollIntoView({ behavior: 'smooth' });" class="mt-20 p-4 rounded-full glass-panel hover:bg-white/10 transition-all group animate-bounce focus:outline-none focus:ring-2 focus:ring-brand-primary" aria-label="Back to Portfolio">
+          <svg class="w-6 h-6 text-white group-hover:-translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+        </button>
+      </div>
+    </section>
 
     <!-- JavaScript Logic -->
     <script>
@@ -271,6 +292,7 @@
 
         // Re-render content
         renderSlides();
+        renderServices();
         
         // Restore position and active state
         goToSlide(currentIndex);
@@ -293,6 +315,7 @@
         }
 
         renderSlides();
+        renderServices();
         goToSlide(currentIndex);
       }
 
@@ -432,7 +455,10 @@
 
       function goToSlide(index) {
         if (index < 0) index = totalSlides - 1;
-        if (index >= totalSlides) index = 0;
+        if (index >= totalSlides) {
+            document.getElementById('services').scrollIntoView({ behavior: 'smooth' });
+            return;
+        }
 
         currentIndex = index;
         const isRTL = document.documentElement.dir === 'rtl';
@@ -519,9 +545,75 @@
         }
       }
 
+      // Services Data and Logic
+      const servicesData = [
+        {
+          title: "Web Development",
+          titleAr: "تطوير الويب",
+          desc: "Building highly responsive and scalable web applications using modern technologies.",
+          descAr: "بناء تطبيقات ويب سريعة الاستجابة وقابلة للتطوير باستخدام تقنيات حديثة.",
+          icon: `<svg class="w-8 h-8 md:w-10 md:h-10 text-brand-primary transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>`
+        },
+        {
+          title: "UI/UX Design",
+          titleAr: "تصميم واجهة وتجربة المستخدم",
+          desc: "Crafting intuitive and immersive user experiences with a focus on human-centric design.",
+          descAr: "صياغة تجارب مستخدم بديهية وغامرة مع التركيز على التصميم المتمحور حول الإنسان.",
+          icon: `<svg class="w-8 h-8 md:w-10 md:h-10 text-brand-accent transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>`
+        },
+        {
+          title: "Cloud Architecture",
+          titleAr: "البنية التحتية السحابية",
+          desc: "Designing robust and secure backend systems optimized for high availability in the cloud.",
+          descAr: "تصميم أنظمة خلفية قوية وآمنة محسنة لتوافر الخدمة العالي في السحابة.",
+          icon: `<svg class="w-8 h-8 md:w-10 md:h-10 text-emerald-500 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>`
+        }
+      ];
+
+      function renderServices() {
+        const grid = document.getElementById("services-grid");
+        const title = document.getElementById("services-title");
+        title.innerText = currentLang === 'ar' ? 'خدماتنا' : 'Our Services';
+        grid.innerHTML = "";
+        
+        servicesData.forEach((service, index) => {
+            const card = document.createElement("div");
+            card.className = "glass-panel p-8 rounded-2xl hover:bg-white/5 transition-all duration-300 group hover:-translate-y-2 relative overflow-hidden";
+            card.innerHTML = `
+                <div class="${currentLang === 'ar' ? 'absolute top-0 left-0 w-32 h-32 bg-white/5 flex items-start justify-start p-4 drop-shadow-xl z-0 rounded-br-[100px]' : 'absolute top-0 right-0 w-32 h-32 bg-white/5 flex items-start justify-end p-4 drop-shadow-xl z-0 rounded-bl-[100px]'} transition-all duration-300">
+                    ${service.icon}
+                </div>
+                <div class="relative z-10 flex flex-col h-full mt-10">
+                    <h3 class="text-2xl font-bold mb-4 text-white group-hover:text-brand-primary transition-colors cursor-text ${isEditMode ? 'hover:bg-white/10 p-1 -mx-1 rounded focus:outline-none focus:ring-1 focus:ring-brand-primary' : ''}"
+                        ${isEditMode ? 'contenteditable="true"' : ''}
+                        onblur="updateServiceTitle(${index}, this.innerText)">
+                        ${currentLang === 'ar' ? service.titleAr : service.title}
+                    </h3>
+                    <p class="text-slate-400 leading-relaxed cursor-text ${isEditMode ? 'hover:bg-white/5 p-1 -mx-1 rounded focus:outline-none focus:ring-1 focus:ring-brand-primary' : ''}"
+                       ${isEditMode ? 'contenteditable="true"' : ''}
+                       onblur="updateServiceDesc(${index}, this.innerText)">
+                        ${currentLang === 'ar' ? service.descAr : service.desc}
+                    </p>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+      }
+
+      function updateServiceTitle(index, text) {
+        if (currentLang === 'ar') servicesData[index].titleAr = text.trim();
+        else servicesData[index].title = text.trim();
+      }
+
+      function updateServiceDesc(index, text) {
+        if (currentLang === 'ar') servicesData[index].descAr = text.trim();
+        else servicesData[index].desc = text.trim();
+      }
+
       // Initialize
       renderSlides();
       renderPagination();
+      renderServices();
       // Slight delay to trigger initial animation nicely
       setTimeout(() => updateSlideClasses(), 50);
     </script>
