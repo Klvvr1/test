@@ -42,6 +42,25 @@
         border: 1px solid rgba(255, 255, 255, 0.1);
       }
 
+      /* Flip Card Animation */
+      .perspective-1000 {
+        perspective: 1000px;
+      }
+      .flip-card-inner {
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        transform-style: preserve-3d;
+      }
+      .flip-card:hover .flip-card-inner {
+        transform: rotateY(180deg);
+      }
+      .flip-card-front, .flip-card-back {
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+      }
+      .flip-card-back {
+        transform: rotateY(180deg);
+      }
+
       /* Hide scrollbar for clean UI */
       .no-scrollbar::-webkit-scrollbar {
         display: none;
@@ -578,22 +597,33 @@
         
         servicesData.forEach((service, index) => {
             const card = document.createElement("div");
-            card.className = "glass-panel p-8 rounded-2xl hover:bg-white/5 transition-all duration-300 group hover:-translate-y-2 relative overflow-hidden";
+            card.className = "flip-card w-full h-[320px] perspective-1000 group z-10";
             card.innerHTML = `
-                <div class="${currentLang === 'ar' ? 'absolute top-0 left-0 w-32 h-32 bg-white/5 flex items-start justify-start p-4 drop-shadow-xl z-0 rounded-br-[100px]' : 'absolute top-0 right-0 w-32 h-32 bg-white/5 flex items-start justify-end p-4 drop-shadow-xl z-0 rounded-bl-[100px]'} transition-all duration-300">
-                    ${service.icon}
-                </div>
-                <div class="relative z-10 flex flex-col h-full mt-10">
-                    <h3 class="text-2xl font-bold mb-4 text-white group-hover:text-brand-primary transition-colors cursor-text ${isEditMode ? 'hover:bg-white/10 p-1 -mx-1 rounded focus:outline-none focus:ring-1 focus:ring-brand-primary' : ''}"
-                        ${isEditMode ? 'contenteditable="true"' : ''}
-                        onblur="updateServiceTitle(${index}, this.innerText)">
-                        ${currentLang === 'ar' ? service.titleAr : service.title}
-                    </h3>
-                    <p class="text-slate-400 leading-relaxed cursor-text ${isEditMode ? 'hover:bg-white/5 p-1 -mx-1 rounded focus:outline-none focus:ring-1 focus:ring-brand-primary' : ''}"
-                       ${isEditMode ? 'contenteditable="true"' : ''}
-                       onblur="updateServiceDesc(${index}, this.innerText)">
-                        ${currentLang === 'ar' ? service.descAr : service.desc}
-                    </p>
+                <div class="flip-card-inner relative w-full h-full shadow-xl rounded-2xl">
+                    <!-- Front Side -->
+                    <div class="flip-card-front absolute w-full h-full glass-panel p-8 rounded-2xl flex flex-col items-center justify-center overflow-hidden border border-white/10">
+                        <div class="${currentLang === 'ar' ? 'absolute top-0 left-0 w-32 h-32 bg-white/5 flex items-start justify-start p-4 drop-shadow-xl z-0 rounded-br-[100px]' : 'absolute top-0 right-0 w-32 h-32 bg-white/5 flex items-start justify-end p-4 drop-shadow-xl z-0 rounded-bl-[100px]'} transition-all duration-500 group-hover:bg-brand-primary/10">
+                            ${service.icon}
+                        </div>
+                        <h3 class="relative z-10 text-3xl font-bold text-white text-center transition-colors cursor-text ${isEditMode ? 'hover:bg-white/10 p-2 rounded focus:outline-none focus:ring-1 focus:ring-brand-primary' : ''}"
+                            ${isEditMode ? 'contenteditable="true"' : ''}
+                            onblur="updateServiceTitle(${index}, this.innerText)">
+                            ${currentLang === 'ar' ? service.titleAr : service.title}
+                        </h3>
+                        <div class="absolute bottom-6 w-full text-center text-brand-primary/60 text-sm font-medium animate-pulse flex items-center justify-center gap-2">
+                            <span>${currentLang === 'ar' ? 'التفاصيل' : 'Details'}</span>
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path></svg>
+                        </div>
+                    </div>
+                    <!-- Back Side -->
+                    <div class="flip-card-back absolute w-full h-full glass-panel p-8 rounded-2xl flex flex-col items-center justify-center text-center shadow-2xl border border-white/10">
+                        <div class="w-12 h-1 mb-6 bg-brand-primary rounded-full"></div>
+                        <p class="text-slate-300 text-lg leading-relaxed cursor-text ${isEditMode ? 'hover:bg-white/5 p-2 rounded focus:outline-none focus:ring-1 focus:ring-brand-primary' : ''}"
+                           ${isEditMode ? 'contenteditable="true"' : ''}
+                           onblur="updateServiceDesc(${index}, this.innerText)">
+                            ${currentLang === 'ar' ? service.descAr : service.desc}
+                        </p>
+                    </div>
                 </div>
             `;
             grid.appendChild(card);
