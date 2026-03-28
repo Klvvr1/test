@@ -13,6 +13,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
 
+  <meta name="description" content="Discover our team of innovative digital experts. We specialize in Web Development, UI/UX Design, and Cloud Architecture." />
+  <meta name="keywords" content="Portfolio, Web Development, Team, UI/UX, Cloud, Digital Agency" />
+  <meta property="og:title" content="Team Portfolio | Modern & Responsive" />
+  <meta property="og:description" content="Meet the minds behind the innovation." />
+  <meta property="og:type" content="website" />
+
   <script>
     tailwind.config = {
       theme: {
@@ -116,11 +122,37 @@
     .nav-btn:hover .arrow-icon {
       transform: scale(1.2);
     }
+
+    /* Floating Glow Animation */
+    @keyframes floating {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(2%, 5%) scale(1.05); }
+      66% { transform: translate(-3%, -2%) scale(0.95); }
+    }
+
+    .animate-float {
+      animation: floating 8s ease-in-out infinite;
+    }
+
+    /* Scroll Progress Bar */
+    #scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 4px;
+      background: linear-gradient(to right, #3b82f6, #8b5cf6);
+      z-index: 100;
+      transition: width 0.1s ease-out;
+    }
   </style>
 </head>
 
 <body
   class="bg-brand-dark text-white font-sans overflow-x-hidden antialiased selection:bg-brand-primary selection:text-white">
+  <!-- Scroll Progress Indicator -->
+  <div id="scroll-progress"></div>
+
   <!-- Logo (Fixed Top Left) -->
   <div class="fixed top-6 left-6 z-50 flex items-center gap-3">
     <a href="#" class="block transition-transform hover:scale-105">
@@ -151,7 +183,7 @@
     class="relative min-h-screen w-full flex flex-col items-center justify-center px-6 md:px-20 py-20 z-10 border-b border-black/10 dark:border-white/10">
     <!-- Glow background -->
     <div
-      class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-primary/20 rounded-full blur-[120px] mix-blend-screen pointer-events-none animate-pulse">
+      class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-primary/20 rounded-full blur-[120px] mix-blend-screen pointer-events-none animate-float">
     </div>
 
     <div id="welcome-content"
@@ -166,11 +198,11 @@
     <!-- Background Elements (Decorative) -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
       <div
-        class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-brand-primary/20 rounded-full blur-[120px] mix-blend-screen animate-pulse">
+        class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-brand-primary/20 rounded-full blur-[120px] mix-blend-screen animate-float">
       </div>
       <div
-        class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-brand-accent/20 rounded-full blur-[120px] mix-blend-screen animate-pulse"
-        style="animation-duration: 4s"></div>
+        class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-brand-accent/20 rounded-full blur-[120px] mix-blend-screen animate-float"
+        style="animation-duration: 12s; animation-delay: -2s"></div>
     </div>
 
     <!-- Carousel Track -->
@@ -285,7 +317,33 @@
   <!-- JavaScript Logic -->
   <script>
     // Team Data
-    // Team Data (Simulated DB)
+    // Data Persistence Handlers
+    const STORAGE_KEY = 'portfolio_data_v1';
+    
+    function saveToStorage() {
+      const data = {
+        teamMembers,
+        welcomeData,
+        servicesData
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    function loadFromStorage() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          const data = JSON.parse(saved);
+          if (data.teamMembers) teamMembers.splice(0, teamMembers.length, ...data.teamMembers);
+          if (data.welcomeData) Object.assign(welcomeData, data.welcomeData);
+          if (data.servicesData) servicesData.splice(0, servicesData.length, ...data.servicesData);
+        } catch (e) {
+          console.error("Failed to load data from storage:", e);
+        }
+      }
+    }
+
+    // Initial Data (Default values)
     const teamMembers = [
       {
         name: "Mohammed Hashim",
@@ -318,10 +376,7 @@
         roleAr: "عضو الفريق",
         bio: "Detail-oriented backend engineer ensuring robust and scalable server-side operations. Loves database optimization and cloud infrastructure.",
         bioAr: "مهندس واجهات خلفية دقيق يضمن عمليات خادم قوية وقابلة للتطوير. محب لتحسين قواعد البيانات والبنية التحتية السحابية.",
-        skills: ["Backend Dev", "Database Design", "AWS", "Python"],
-        skillsAr: ["تطوير الخلفية", "تصميم قواعد البيانات", "AWS", "Python"],
-        social: ["github", "linkedin"],
-        image: "https://ui-..com/api/?name=Khaled+Bin+Mahfouz&background=10b981&color=fff&size=512&font-size=0.33",
+        image: "https://ui-avatars.com/api/?name=Khaled+Bin+Mahfouz&background=10b981&color=fff&size=512&font-size=0.33",
       },
       {
         name: "Khallad Ghanem",
@@ -427,6 +482,9 @@
       btnAr: "تعرف على الفريق"
     };
 
+    // Load data from storage right after defining default values
+    loadFromStorage();
+
     function renderWelcome() {
       const welcomeContainer = document.getElementById("welcome-content");
       if (!welcomeContainer) return;
@@ -464,16 +522,19 @@
     function updateWelcomeTitle(text) {
       if (currentLang === 'ar') welcomeData.titleAr = text.trim();
       else welcomeData.title = text.trim();
+      saveToStorage();
     }
 
     function updateWelcomeDesc(text) {
       if (currentLang === 'ar') welcomeData.descAr = text.trim();
       else welcomeData.desc = text.trim();
+      saveToStorage();
     }
 
     function updateWelcomeBtn(text) {
       if (currentLang === 'ar') welcomeData.btnAr = text.trim();
       else welcomeData.btn = text.trim();
+      saveToStorage();
     }
 
     // Render Slides
@@ -609,6 +670,16 @@
       });
     }
 
+    // Scroll Progress Logic
+    window.addEventListener("scroll", () => {
+      const scrollProgress = document.getElementById("scroll-progress");
+      if (scrollProgress) {
+        const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = (window.pageYOffset / totalHeight) * 100;
+        scrollProgress.style.width = `${progress}%`;
+      }
+    });
+
     function goToSlide(index) {
       if (index < 0) index = totalSlides - 1;
       if (index >= totalSlides) {
@@ -683,6 +754,7 @@
       } else {
         teamMembers[memberIdx].role = newRole.trim();
       }
+      saveToStorage();
     }
 
     function updateMemberBio(memberIdx, newBio) {
@@ -691,6 +763,7 @@
       } else {
         teamMembers[memberIdx].bio = newBio.trim();
       }
+      saveToStorage();
     }
 
     function updateMemberSkill(memberIdx, skillIdx, newSkillText) {
@@ -699,6 +772,7 @@
       } else {
         teamMembers[memberIdx].skills[skillIdx] = newSkillText.trim();
       }
+      saveToStorage();
     }
 
     // Services Data and Logic
@@ -736,10 +810,11 @@
         const card = document.createElement("div");
         card.className = "flip-card w-full h-[320px] perspective-1000 group z-10";
         card.innerHTML = `
-                <div class="flip-card-inner relative w-full h-full shadow-xl rounded-2xl">
+        card.innerHTML = `
+                <div class="flip-card-inner relative w-full h-full shadow-xl rounded-2xl group-hover:shadow-brand-primary/20">
                     <!-- Front Side -->
-                    <div class="flip-card-front absolute w-full h-full glass-panel p-8 rounded-2xl flex flex-col items-center justify-center overflow-hidden border border-white/10">
-                        <div class="${currentLang === 'ar' ? 'absolute top-0 left-0 w-32 h-32 bg-white/5 flex items-start justify-start p-4 drop-shadow-xl z-0 rounded-br-[100px]' : 'absolute top-0 right-0 w-32 h-32 bg-white/5 flex items-start justify-end p-4 drop-shadow-xl z-0 rounded-bl-[100px]'} transition-all duration-500 group-hover:bg-brand-primary/10">
+                    <div class="flip-card-front absolute w-full h-full glass-panel p-8 rounded-2xl flex flex-col items-center justify-center overflow-hidden border border-white/10 group-hover:border-brand-primary/30 transition-colors">
+                        <div class="${currentLang === 'ar' ? 'absolute top-0 left-0 w-32 h-32 bg-white/5 flex items-start justify-start p-4 drop-shadow-xl z-0 rounded-br-[100px]' : 'absolute top-0 right-0 w-32 h-32 bg-white/5 flex items-start justify-end p-4 drop-shadow-xl z-0 rounded-bl-[100px]'} transition-all duration-500 group-hover:bg-brand-primary/20 group-hover:scale-110">
                             ${service.icon}
                         </div>
                         <h3 class="relative z-10 text-3xl font-bold text-white text-center transition-colors cursor-text ${isEditMode ? 'hover:bg-white/10 p-2 rounded focus:outline-none focus:ring-1 focus:ring-brand-primary' : ''}"
@@ -770,11 +845,13 @@
     function updateServiceTitle(index, text) {
       if (currentLang === 'ar') servicesData[index].titleAr = text.trim();
       else servicesData[index].title = text.trim();
+      saveToStorage();
     }
 
     function updateServiceDesc(index, text) {
       if (currentLang === 'ar') servicesData[index].descAr = text.trim();
       else servicesData[index].desc = text.trim();
+      saveToStorage();
     }
 
     // Initialize
