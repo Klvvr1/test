@@ -402,6 +402,7 @@
       }
 
       // Re-render content
+      if (typeof renderWelcome === 'function') renderWelcome();
       renderSlides();
       renderServices();
 
@@ -425,11 +426,70 @@
         editBtn.classList.add('border-white/20');
       }
 
+      if (typeof renderWelcome === 'function') renderWelcome();
       renderSlides();
       renderServices();
       goToSlide(currentIndex);
     }
 
+    // Welcome Section Data & Logic
+    const welcomeData = {
+      title: "Welcome to Our Hub",
+      titleAr: "مرحباً بكم في مركزنا",
+      desc: "Discover a collective of innovative minds dedicated to crafting exceptional digital experiences. Explore our team, our work, and the services we offer.",
+      descAr: "اكتشف مجموعة من العقول المبتكرة المكرسة لصياغة تجارب رقمية استثنائية. استكشف فريقنا وأعمالنا والخدمات التي نقدمها.",
+      btn: "Meet The Team",
+      btnAr: "تعرف على الفريق"
+    };
+
+    function renderWelcome() {
+      const welcomeContainer = document.getElementById("welcome-content");
+      if (!welcomeContainer) return;
+      
+      const isRTL = currentLang === 'ar';
+      const titleText = isRTL ? welcomeData.titleAr : welcomeData.title;
+      const descText = isRTL ? welcomeData.descAr : welcomeData.desc;
+      const btnText = isRTL ? welcomeData.btnAr : welcomeData.btn;
+      
+      welcomeContainer.innerHTML = `
+        <h1 class="text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-primary to-brand-accent drop-shadow-sm transition-colors ${isEditMode ? 'hover:bg-black/5 dark:hover:bg-white/5 cursor-text focus:outline-none focus:ring-2 focus:ring-brand-primary rounded p-2' : ''}"
+            ${isEditMode ? 'contenteditable="true"' : ''}
+            onblur="updateWelcomeTitle(this.innerText)">
+          ${titleText}
+        </h1>
+        
+        <p class="text-xl md:text-2xl text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl mx-auto transition-colors ${isEditMode ? 'cursor-text hover:bg-black/5 dark:hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-brand-primary rounded p-2' : ''}"
+            ${isEditMode ? 'contenteditable="true"' : ''}
+            onblur="updateWelcomeDesc(this.innerText)">
+          ${descText}
+        </p>
+        
+        <div class="pt-8">
+          <button onclick="if(!isEditMode) document.getElementById('portfolio').scrollIntoView({ behavior: 'smooth' });" class="px-8 py-4 bg-brand-primary hover:bg-brand-primary/90 text-white rounded-full font-bold text-lg shadow-lg hover:shadow-brand-primary/50 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-primary dark:focus:ring-offset-brand-dark flex items-center gap-3 mx-auto ${!isEditMode ? 'hover:-translate-y-1' : ''}">
+            <span class="${isEditMode ? 'cursor-text focus:outline-none focus:ring-1 focus:ring-white/50 rounded px-2' : ''}"
+                  ${isEditMode ? 'contenteditable="true" onblur="updateWelcomeBtn(this.innerText)"' : ''}>
+              ${btnText}
+            </span>
+            <svg class="w-5 h-5 ${!isEditMode ? 'animate-bounce' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+          </button>
+        </div>
+      `;
+    }
+    
+    function updateWelcomeTitle(text) {
+      if (currentLang === 'ar') welcomeData.titleAr = text.trim();
+      else welcomeData.title = text.trim();
+    }
+
+    function updateWelcomeDesc(text) {
+      if (currentLang === 'ar') welcomeData.descAr = text.trim();
+      else welcomeData.desc = text.trim();
+    }
+
+    function updateWelcomeBtn(text) {
+      if (currentLang === 'ar') welcomeData.btnAr = text.trim();
+      else welcomeData.btn = text.trim();
+    }
 
     // Render Slides
     function renderSlides() {
@@ -440,123 +500,20 @@
         slide.setAttribute("aria-hidden", index !== 0);
         slide.dataset.index = index;
 
-<<<<<<< HEAD
         // Localized Data
         const name = currentLang === 'ar' ? member.nameAr : member.name;
         const role = currentLang === 'ar' ? member.roleAr : member.role;
         const bio = currentLang === 'ar' ? member.bioAr : member.bio;
         const skills = currentLang === 'ar' ? member.skillsAr : member.skills;
         const isRTL = currentLang === 'ar';
-=======
-        // Re-render content
-        renderWelcome();
-        renderSlides();
-        renderServices();
-        
-        // Restore position and active state
-        goToSlide(currentIndex);
-      }
->>>>>>> ed5ea435d1b8757681aeb1282252e37c86a8f9ef
 
         // For layout: In RTL mode, flex-row (no reverse) puts first child on Right.
         // [Image, Text] -> Image Right, Text Left.
         // This is usually correct.
         // Text Alignment: need md:text-right or md:text-start. 
         // Item alignment: md:items-start in Flex follows direction (Right in RTL).
-
-<<<<<<< HEAD
+        
         slide.innerHTML = `
-=======
-        renderWelcome();
-        renderSlides();
-        renderServices();
-        goToSlide(currentIndex);
-      }
-
-      
-      // Welcome Section Data & Logic
-      const welcomeData = {
-        title: "Welcome to Our Hub",
-        titleAr: "مرحباً بكم في مركزنا",
-        desc: "Discover a collective of innovative minds dedicated to crafting exceptional digital experiences. Explore our team, our work, and the services we offer.",
-        descAr: "اكتشف مجموعة من العقول المبتكرة المكرسة لصياغة تجارب رقمية استثنائية. استكشف فريقنا وأعمالنا والخدمات التي نقدمها.",
-        btn: "Meet The Team",
-        btnAr: "تعرف على الفريق"
-      };
-
-      function renderWelcome() {
-        const welcomeContainer = document.getElementById("welcome-content");
-        if (!welcomeContainer) return;
-        
-        const isRTL = currentLang === 'ar';
-        const titleText = isRTL ? welcomeData.titleAr : welcomeData.title;
-        const descText = isRTL ? welcomeData.descAr : welcomeData.desc;
-        const btnText = isRTL ? welcomeData.btnAr : welcomeData.btn;
-        
-        welcomeContainer.innerHTML = `
-          <h1 class="text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-primary to-brand-accent drop-shadow-sm transition-colors ${isEditMode ? 'hover:bg-black/5 dark:hover:bg-white/5 cursor-text focus:outline-none focus:ring-2 focus:ring-brand-primary rounded p-2' : ''}"
-              ${isEditMode ? 'contenteditable="true"' : ''}
-              onblur="updateWelcomeTitle(this.innerText)">
-            ${titleText}
-          </h1>
-          
-          <p class="text-xl md:text-2xl text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl mx-auto transition-colors ${isEditMode ? 'cursor-text hover:bg-black/5 dark:hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-brand-primary rounded p-2' : ''}"
-              ${isEditMode ? 'contenteditable="true"' : ''}
-              onblur="updateWelcomeDesc(this.innerText)">
-            ${descText}
-          </p>
-          
-          <div class="pt-8">
-            <button onclick="if(!isEditMode) document.getElementById('portfolio').scrollIntoView({ behavior: 'smooth' });" class="px-8 py-4 bg-brand-primary hover:bg-brand-primary/90 text-white rounded-full font-bold text-lg shadow-lg hover:shadow-brand-primary/50 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-primary dark:focus:ring-offset-brand-dark flex items-center gap-3 mx-auto ${!isEditMode ? 'hover:-translate-y-1' : ''}">
-              <span class="${isEditMode ? 'cursor-text focus:outline-none focus:ring-1 focus:ring-white/50 rounded px-2' : ''}"
-                    ${isEditMode ? 'contenteditable="true" onblur="updateWelcomeBtn(this.innerText)"' : ''}>
-                ${btnText}
-              </span>
-              <svg class="w-5 h-5 ${!isEditMode ? 'animate-bounce' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
-            </button>
-          </div>
-        `;
-      }
-      
-      function updateWelcomeTitle(text) {
-        if (currentLang === 'ar') welcomeData.titleAr = text.trim();
-        else welcomeData.title = text.trim();
-      }
-
-      function updateWelcomeDesc(text) {
-        if (currentLang === 'ar') welcomeData.descAr = text.trim();
-        else welcomeData.desc = text.trim();
-      }
-
-      function updateWelcomeBtn(text) {
-        if (currentLang === 'ar') welcomeData.btnAr = text.trim();
-        else welcomeData.btn = text.trim();
-      }
-
-      // Render Slides
-      function renderSlides() {
-        track.innerHTML = ""; // Clear existing
-        teamMembers.forEach((member, index) => {
-          const slide = document.createElement("article");
-          slide.className = `min-w-full h-full flex flex-col md:flex-row items-center justify-center p-6 md:p-20 gap-8 md:gap-16 opacity-100 transition-opacity duration-300 slide-item`;
-          slide.setAttribute("aria-hidden", index !== 0);
-          slide.dataset.index = index;
-
-          // Localized Data
-          const name = currentLang === 'ar' ? member.nameAr : member.name;
-          const role = currentLang === 'ar' ? member.roleAr : member.role;
-          const bio = currentLang === 'ar' ? member.bioAr : member.bio;
-          const skills = currentLang === 'ar' ? member.skillsAr : member.skills;
-          const isRTL = currentLang === 'ar';
-
-          // For layout: In RTL mode, flex-row (no reverse) puts first child on Right.
-          // [Image, Text] -> Image Right, Text Left.
-          // This is usually correct.
-          // Text Alignment: need md:text-right or md:text-start. 
-          // Item alignment: md:items-start in Flex follows direction (Right in RTL).
-          
-          slide.innerHTML = `
->>>>>>> ed5ea435d1b8757681aeb1282252e37c86a8f9ef
                     <!-- Pop-out Image Section -->
                     <div class="relative w-56 h-72 md:w-72 md:h-96 shrink-0 flex items-end justify-center slide-content-item delay-100 group">
                         
