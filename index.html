@@ -116,13 +116,15 @@
   <body
     class="bg-brand-light dark:bg-brand-dark text-slate-900 dark:text-white font-sans overflow-x-hidden antialiased selection:bg-brand-primary selection:text-white transition-colors duration-500"
   >
-    <!-- Main Carousel Section -->
-    <section id="portfolio"
-      class="relative h-screen w-full flex items-center justify-center overflow-hidden"
-      aria-label="Team Portfolio Carousel"
-    >
-      <!-- Top Right Controls -->
-      <div class="absolute top-6 right-6 z-50 flex items-center gap-3">
+    <!-- Logo (Fixed Top Left) -->
+    <div class="fixed top-6 left-6 z-50 flex items-center gap-3">
+        <a href="#" class="block transition-transform hover:scale-105">
+            <img src="./logo.png" alt="متجر ريادة" class="h-12 md:h-16 w-auto object-contain drop-shadow-md">
+        </a>
+    </div>
+
+    <!-- Top Right Controls (Fixed so it accompanies entire scroll) -->
+    <div class="fixed top-6 right-6 z-50 flex items-center gap-3">
         <!-- Edit Mode Toggle Button -->
         <button id="edit-mode-btn" onclick="toggleEditMode()" class="px-4 py-2 bg-black/5 dark:bg-white/10 backdrop-blur-md border border-black/10 dark:border-white/20 rounded-full text-sm font-bold text-slate-800 dark:text-white hover:bg-black/10 dark:hover:bg-white/20 transition-all shadow-lg flex items-center gap-2">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
@@ -143,7 +145,23 @@
         <button id="lang-btn" onclick="toggleLanguage()" class="px-5 py-2 bg-black/5 dark:bg-white/10 backdrop-blur-md border border-black/10 dark:border-white/20 rounded-full text-sm font-bold text-slate-800 dark:text-white hover:bg-black/10 dark:hover:bg-white/20 transition-all font-cairo shadow-lg">
           العربية
         </button>
+    </div>
+
+    <!-- Welcome Section -->
+    <section id="welcome" class="relative min-h-screen w-full flex flex-col items-center justify-center px-6 md:px-20 py-20 z-10 border-b border-black/10 dark:border-white/10">
+      <!-- Glow background -->
+      <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-primary/20 rounded-full blur-[120px] mix-blend-screen pointer-events-none animate-pulse"></div>
+      
+      <div id="welcome-content" class="relative z-10 w-full max-w-4xl mx-auto text-center flex flex-col items-center justify-center space-y-8">
+        <!-- Rendered by JS -->
       </div>
+    </section>
+
+    <!-- Main Carousel Section -->
+    <section id="portfolio"
+      class="relative h-screen w-full flex items-center justify-center overflow-hidden"
+      aria-label="Team Portfolio Carousel"
+    >
       <!-- Background Elements (Decorative) -->
       <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <div
@@ -345,6 +363,7 @@
         }
 
         // Re-render content
+        renderWelcome();
         renderSlides();
         renderServices();
         
@@ -368,12 +387,72 @@
             editBtn.classList.add('border-white/20');
         }
 
+        renderWelcome();
         renderSlides();
         renderServices();
         goToSlide(currentIndex);
       }
 
       
+      // Welcome Section Data & Logic
+      const welcomeData = {
+        title: "Welcome to Our Hub",
+        titleAr: "مرحباً بكم في مركزنا",
+        desc: "Discover a collective of innovative minds dedicated to crafting exceptional digital experiences. Explore our team, our work, and the services we offer.",
+        descAr: "اكتشف مجموعة من العقول المبتكرة المكرسة لصياغة تجارب رقمية استثنائية. استكشف فريقنا وأعمالنا والخدمات التي نقدمها.",
+        btn: "Meet The Team",
+        btnAr: "تعرف على الفريق"
+      };
+
+      function renderWelcome() {
+        const welcomeContainer = document.getElementById("welcome-content");
+        if (!welcomeContainer) return;
+        
+        const isRTL = currentLang === 'ar';
+        const titleText = isRTL ? welcomeData.titleAr : welcomeData.title;
+        const descText = isRTL ? welcomeData.descAr : welcomeData.desc;
+        const btnText = isRTL ? welcomeData.btnAr : welcomeData.btn;
+        
+        welcomeContainer.innerHTML = `
+          <h1 class="text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-primary to-brand-accent drop-shadow-sm transition-colors ${isEditMode ? 'hover:bg-black/5 dark:hover:bg-white/5 cursor-text focus:outline-none focus:ring-2 focus:ring-brand-primary rounded p-2' : ''}"
+              ${isEditMode ? 'contenteditable="true"' : ''}
+              onblur="updateWelcomeTitle(this.innerText)">
+            ${titleText}
+          </h1>
+          
+          <p class="text-xl md:text-2xl text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl mx-auto transition-colors ${isEditMode ? 'cursor-text hover:bg-black/5 dark:hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-brand-primary rounded p-2' : ''}"
+              ${isEditMode ? 'contenteditable="true"' : ''}
+              onblur="updateWelcomeDesc(this.innerText)">
+            ${descText}
+          </p>
+          
+          <div class="pt-8">
+            <button onclick="if(!isEditMode) document.getElementById('portfolio').scrollIntoView({ behavior: 'smooth' });" class="px-8 py-4 bg-brand-primary hover:bg-brand-primary/90 text-white rounded-full font-bold text-lg shadow-lg hover:shadow-brand-primary/50 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-primary dark:focus:ring-offset-brand-dark flex items-center gap-3 mx-auto ${!isEditMode ? 'hover:-translate-y-1' : ''}">
+              <span class="${isEditMode ? 'cursor-text focus:outline-none focus:ring-1 focus:ring-white/50 rounded px-2' : ''}"
+                    ${isEditMode ? 'contenteditable="true" onblur="updateWelcomeBtn(this.innerText)"' : ''}>
+                ${btnText}
+              </span>
+              <svg class="w-5 h-5 ${!isEditMode ? 'animate-bounce' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+            </button>
+          </div>
+        `;
+      }
+      
+      function updateWelcomeTitle(text) {
+        if (currentLang === 'ar') welcomeData.titleAr = text.trim();
+        else welcomeData.title = text.trim();
+      }
+
+      function updateWelcomeDesc(text) {
+        if (currentLang === 'ar') welcomeData.descAr = text.trim();
+        else welcomeData.desc = text.trim();
+      }
+
+      function updateWelcomeBtn(text) {
+        if (currentLang === 'ar') welcomeData.btnAr = text.trim();
+        else welcomeData.btn = text.trim();
+      }
+
       // Render Slides
       function renderSlides() {
         track.innerHTML = ""; // Clear existing
@@ -676,6 +755,7 @@
       }
 
       // Initialize
+      renderWelcome();
       renderSlides();
       renderPagination();
       renderServices();
