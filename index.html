@@ -376,6 +376,9 @@
         roleAr: "عضو الفريق",
         bio: "Detail-oriented backend engineer ensuring robust and scalable server-side operations. Loves database optimization and cloud infrastructure.",
         bioAr: "مهندس واجهات خلفية دقيق يضمن عمليات خادم قوية وقابلة للتطوير. محب لتحسين قواعد البيانات والبنية التحتية السحابية.",
+        skills: ["Backend Dev", "Database Design", "AWS", "Python"],
+        skillsAr: ["تطوير الخلفية", "تصميم قواعد البيانات", "AWS", "Python"],
+        social: ["github", "linkedin"],
         image: "https://ui-avatars.com/api/?name=Khaled+Bin+Mahfouz&background=10b981&color=fff&size=512&font-size=0.33",
       },
       {
@@ -482,8 +485,7 @@
       btnAr: "تعرف على الفريق"
     };
 
-    // Load data from storage right after defining default values
-    loadFromStorage();
+    };
 
     function renderWelcome() {
       const welcomeContainer = document.getElementById("welcome-content");
@@ -858,6 +860,15 @@
     renderSlides();
     renderPagination();
     renderServices();
+
+    // Load data from storage after all objects are defined
+    loadFromStorage();
+
+    // Re-render once after loading
+    renderWelcome();
+    renderSlides();
+    renderServices();
+
     // Slight delay to trigger initial animation nicely
     setTimeout(() => updateSlideClasses(), 50);
   </script>
