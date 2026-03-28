@@ -1,402 +1,504 @@
 <!doctype html>
-<html lang="en" class="scroll-smooth dark">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Team Portfolio | Modern & Responsive</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<html lang="en" class="scroll-smooth">
 
-    <script>
-      tailwind.config = {
-        darkMode: 'class',
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ["Outfit", "sans-serif"],
-              cairo: ["Cairo", "sans-serif"],
-            },
-            colors: {
-              brand: {
-                dark: "#0f172a", // Slate 900
-                light: "#f8fafc", // Slate 50
-                primary: "#3b82f6", // Blue 500
-                accent: "#8b5cf6", // Violet 500
-              },
-            },
-            transitionTimingFunction: {
-              "out-expo": "cubic-bezier(0.19, 1, 0.22, 1)",
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Team Portfolio | Modern & Responsive</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Outfit", "sans-serif"],
+            cairo: ["Cairo", "sans-serif"],
+          },
+          colors: {
+            brand: {
+              dark: "#0f172a", // Slate 900
+              primary: "#3b82f6", // Blue 500
+              accent: "#8b5cf6", // Violet 500
             },
           },
+          transitionTimingFunction: {
+            "out-expo": "cubic-bezier(0.19, 1, 0.22, 1)",
+          },
         },
-      };
-    </script>
-    <style>
-      /* Custom Styles for Utilities not in Tailwind by default */
-      .glass-panel {
-        background: rgba(0, 0, 0, 0.03);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(0, 0, 0, 0.05);
-      }
-      .dark .glass-panel {
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-      }
+      },
+    };
+  </script>
+  <style>
+    /* Custom Styles for Utilities not in Tailwind by default */
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
 
-      /* Flip Card Animation */
-      .perspective-1000 {
-        perspective: 1000px;
-      }
-      .flip-card-inner {
-        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        transform-style: preserve-3d;
-      }
-      .flip-card:hover .flip-card-inner {
-        transform: rotateY(180deg);
-      }
-      .flip-card-front, .flip-card-back {
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
-      }
-      .flip-card-back {
-        transform: rotateY(180deg);
-      }
+    /* Flip Card Animation */
+    .perspective-1000 {
+      perspective: 1000px;
+    }
 
-      /* Hide scrollbar for clean UI */
-      .no-scrollbar::-webkit-scrollbar {
-        display: none;
-      }
-      .no-scrollbar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-      }
+    .flip-card-inner {
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+    }
 
-      /* Staggered Animation Logic */
-      .slide-content-item {
-        opacity: 0;
-        transform: translateY(20px);
-        transition:
-          opacity 0.6s ease-out,
-          transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-      }
+    .flip-card:hover .flip-card-inner {
+      transform: rotateY(180deg);
+    }
 
-      .active-slide .slide-content-item {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .flip-card-front,
+    .flip-card-back {
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
 
-      /* Stagger Delays */
-      .active-slide .delay-100 {
-        transition-delay: 100ms;
-      }
-      .active-slide .delay-200 {
-        transition-delay: 200ms;
-      }
-      .active-slide .delay-300 {
-        transition-delay: 300ms;
-      }
-      .active-slide .delay-400 {
-        transition-delay: 400ms;
-      }
-      .active-slide .delay-500 {
-        transition-delay: 500ms;
-      }
+    .flip-card-back {
+      transform: rotateY(180deg);
+    }
 
-      /* Navigation Button Hover Effect */
-      .nav-btn:hover .arrow-icon {
-        transform: scale(1.2);
-      }
-    </style>
-  </head>
-  <body
-    class="bg-brand-light dark:bg-brand-dark text-slate-900 dark:text-white font-sans overflow-x-hidden antialiased selection:bg-brand-primary selection:text-white transition-colors duration-500"
-  >
-    <!-- Main Carousel Section -->
-    <section id="portfolio"
-      class="relative h-screen w-full flex items-center justify-center overflow-hidden"
-      aria-label="Team Portfolio Carousel"
-    >
-      <!-- Top Right Controls -->
-      <div class="absolute top-6 right-6 z-50 flex items-center gap-3">
-        <!-- Edit Mode Toggle Button -->
-        <button id="edit-mode-btn" onclick="toggleEditMode()" class="px-4 py-2 bg-black/5 dark:bg-white/10 backdrop-blur-md border border-black/10 dark:border-white/20 rounded-full text-sm font-bold text-slate-800 dark:text-white hover:bg-black/10 dark:hover:bg-white/20 transition-all shadow-lg flex items-center gap-2">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-          <span id="edit-mode-text" class="font-sans">Edit</span>
-        </button>
-        <!-- Theme Toggle Button -->
-        <button id="theme-btn" onclick="toggleTheme()" class="px-3 py-2 bg-black/5 dark:bg-white/10 backdrop-blur-md border border-black/10 dark:border-white/20 rounded-full text-slate-800 dark:text-white hover:bg-black/10 dark:hover:bg-white/20 transition-all shadow-lg flex items-center justify-center">
-          <!-- Sun Icon -->
-          <svg id="theme-icon-light" class="w-5 h-5 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-          </svg>
-          <!-- Moon Icon -->
-          <svg id="theme-icon-dark" class="w-5 h-5 block dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-          </svg>
-        </button>
-        <!-- Language Toggle Button -->
-        <button id="lang-btn" onclick="toggleLanguage()" class="px-5 py-2 bg-black/5 dark:bg-white/10 backdrop-blur-md border border-black/10 dark:border-white/20 rounded-full text-sm font-bold text-slate-800 dark:text-white hover:bg-black/10 dark:hover:bg-white/20 transition-all font-cairo shadow-lg">
-          العربية
-        </button>
-      </div>
-      <!-- Background Elements (Decorative) -->
-      <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div
-          class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-brand-primary/20 rounded-full blur-[120px] mix-blend-screen animate-pulse"
-        ></div>
-        <div
-          class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-brand-accent/20 rounded-full blur-[120px] mix-blend-screen animate-pulse"
-          style="animation-duration: 4s"
-        ></div>
-      </div>
+    /* Hide scrollbar for clean UI */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
 
-      <!-- Carousel Track -->
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Staggered Animation Logic */
+    .slide-content-item {
+      opacity: 0;
+      transform: translateY(20px);
+      transition:
+        opacity 0.6s ease-out,
+        transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .active-slide .slide-content-item {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Stagger Delays */
+    .active-slide .delay-100 {
+      transition-delay: 100ms;
+    }
+
+    .active-slide .delay-200 {
+      transition-delay: 200ms;
+    }
+
+    .active-slide .delay-300 {
+      transition-delay: 300ms;
+    }
+
+    .active-slide .delay-400 {
+      transition-delay: 400ms;
+    }
+
+    .active-slide .delay-500 {
+      transition-delay: 500ms;
+    }
+
+    /* Navigation Button Hover Effect */
+    .nav-btn:hover .arrow-icon {
+      transform: scale(1.2);
+    }
+  </style>
+</head>
+
+<body
+  class="bg-brand-dark text-white font-sans overflow-x-hidden antialiased selection:bg-brand-primary selection:text-white">
+  <!-- Logo (Fixed Top Left) -->
+  <div class="fixed top-6 left-6 z-50 flex items-center gap-3">
+    <a href="#" class="block transition-transform hover:scale-105">
+      <img src="./logo.png" alt="متجر ريادة" class="h-12 md:h-16 w-auto object-contain drop-shadow-md">
+    </a>
+  </div>
+
+  <!-- Top Right Controls (Fixed so it accompanies entire scroll) -->
+  <div class="fixed top-6 right-6 z-50 flex items-center gap-3">
+    <!-- Edit Mode Toggle Button -->
+    <button id="edit-mode-btn" onclick="toggleEditMode()"
+      class="px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-sm font-bold text-white hover:bg-white/20 transition-all shadow-lg flex items-center gap-2">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+      </svg>
+      <span id="edit-mode-text" class="font-sans">Edit</span>
+    </button>
+    <!-- Language Toggle Button -->
+    <button id="lang-btn" onclick="toggleLanguage()"
+      class="px-5 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-sm font-bold text-white hover:bg-white/20 transition-all font-cairo shadow-lg">
+      العربية
+    </button>
+  </div>
+
+  <!-- Welcome Section -->
+  <section id="welcome"
+    class="relative min-h-screen w-full flex flex-col items-center justify-center px-6 md:px-20 py-20 z-10 border-b border-black/10 dark:border-white/10">
+    <!-- Glow background -->
+    <div
+      class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-primary/20 rounded-full blur-[120px] mix-blend-screen pointer-events-none animate-pulse">
+    </div>
+
+    <div id="welcome-content"
+      class="relative z-10 w-full max-w-4xl mx-auto text-center flex flex-col items-center justify-center space-y-8">
+      <!-- Rendered by JS -->
+    </div>
+  </section>
+
+  <!-- Main Carousel Section -->
+  <section id="portfolio" class="relative h-screen w-full flex items-center justify-center overflow-hidden"
+    aria-label="Team Portfolio Carousel">
+    <!-- Background Elements (Decorative) -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
       <div
-        id="carousel-track"
-        class="flex w-full h-full transition-transform duration-700 ease-in-out will-change-transform z-10"
-        aria-live="polite"
-      >
-        <!-- Slides will be injected here by JS -->
+        class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-brand-primary/20 rounded-full blur-[120px] mix-blend-screen animate-pulse">
+      </div>
+      <div
+        class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-brand-accent/20 rounded-full blur-[120px] mix-blend-screen animate-pulse"
+        style="animation-duration: 4s"></div>
+    </div>
+
+    <!-- Carousel Track -->
+    <div id="carousel-track"
+      class="flex w-full h-full transition-transform duration-700 ease-in-out will-change-transform z-10"
+      aria-live="polite">
+      <!-- Slides will be injected here by JS -->
+    </div>
+
+    <!-- Navigation Controls -->
+    <button id="prev-btn"
+      class="nav-btn absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 p-4 rounded-full glass-panel hover:bg-white/10 transition-all duration-300 group focus:outline-none focus:ring-2 focus:ring-brand-primary"
+      aria-label="Previous Slide">
+      <svg class="arrow-icon w-6 h-6 md:w-8 md:h-8 text-white transition-transform duration-300" fill="none"
+        stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+      </svg>
+    </button>
+
+    <button id="next-btn"
+      class="nav-btn absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 p-4 rounded-full glass-panel hover:bg-white/10 transition-all duration-300 group focus:outline-none focus:ring-2 focus:ring-brand-primary"
+      aria-label="Next Slide">
+      <svg class="arrow-icon w-6 h-6 md:w-8 md:h-8 text-white transition-transform duration-300" fill="none"
+        stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+      </svg>
+    </button>
+
+    <!-- Pagination Indicators -->
+    <div id="pagination" class="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-20">
+      <!-- Dots injected by JS -->
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section id="services"
+    class="min-h-screen w-full bg-brand-dark py-20 px-6 md:px-20 relative flex flex-col items-center justify-center border-t border-white/10 z-10">
+    <!-- Glow background -->
+    <div
+      class="absolute top-0 right-0 w-[40%] h-[40%] bg-brand-accent/10 rounded-full blur-[100px] pointer-events-none">
+    </div>
+
+    <div class="relative z-10 w-full max-w-6xl mx-auto flex flex-col items-center">
+      <h2 id="services-title"
+        class="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60 text-center">
+        Our Services
+      </h2>
+      <div id="services-subtitle" class="w-20 h-1 bg-brand-primary rounded-full mb-16"></div>
+
+      <div id="services-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+        <!-- Services will be populated here -->
       </div>
 
-      <!-- Navigation Controls -->
-      <button
-        id="prev-btn"
-        class="nav-btn absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 p-4 rounded-full glass-panel hover:bg-black/5 dark:hover:bg-white/10 transition-all duration-300 group focus:outline-none focus:ring-2 focus:ring-brand-primary"
-        aria-label="Previous Slide"
-      >
-        <svg
-          class="arrow-icon w-6 h-6 md:w-8 md:h-8 text-slate-800 dark:text-white transition-transform duration-300"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M15 19l-7-7 7-7"
-          ></path>
+      <!-- Back to Portfolio Button -->
+      <button onclick="document.getElementById('portfolio').scrollIntoView({ behavior: 'smooth' });"
+        class="mt-20 p-4 rounded-full glass-panel hover:bg-white/10 transition-all group animate-bounce focus:outline-none focus:ring-2 focus:ring-brand-primary"
+        aria-label="Back to Portfolio">
+        <svg class="w-6 h-6 text-white group-hover:-translate-y-1 transition-transform" fill="none"
+          stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
         </svg>
       </button>
+    </div>
+  </section>
 
-      <button
-        id="next-btn"
-        class="nav-btn absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 p-4 rounded-full glass-panel hover:bg-black/5 dark:hover:bg-white/10 transition-all duration-300 group focus:outline-none focus:ring-2 focus:ring-brand-primary"
-        aria-label="Next Slide"
-      >
-        <svg
-          class="arrow-icon w-6 h-6 md:w-8 md:h-8 text-slate-800 dark:text-white transition-transform duration-300"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 5l7 7-7 7"
-          ></path>
-        </svg>
-      </button>
+  <!-- Footer Section -->
+  <footer id="main-footer" class="w-full bg-brand-dark border-t border-white/10 py-10 px-6 md:px-20 relative z-10">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
 
-      <!-- Pagination Indicators -->
+      <!-- Copyright & Legal -->
       <div
-        id="pagination"
-        class="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-20"
-      >
-        <!-- Dots injected by JS -->
-      </div>
-    </section>
-
-    <!-- Services Section -->
-    <section id="services" class="min-h-screen w-full bg-brand-dark py-20 px-6 md:px-20 relative flex flex-col items-center justify-center border-t border-white/10 z-10">
-      <!-- Glow background -->
-      <div class="absolute top-0 right-0 w-[40%] h-[40%] bg-brand-accent/10 rounded-full blur-[100px] pointer-events-none"></div>
-      
-      <div class="relative z-10 w-full max-w-6xl mx-auto flex flex-col items-center">
-        <h2 id="services-title" class="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60 text-center">
-          Our Services
-        </h2>
-        <div id="services-subtitle" class="w-20 h-1 bg-brand-primary rounded-full mb-16"></div>
-        
-        <div id="services-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
-          <!-- Services will be populated here -->
+        class="flex flex-col items-center md:items-start text-center md:text-left gap-2 text-sm text-slate-400 order-2 md:order-1">
+        <p id="footer-copy">&copy; 2026 Team Portfolio. All rights reserved.</p>
+        <div class="flex items-center gap-4 mt-1">
+          <a href="#" id="footer-privacy" class="hover:text-brand-primary transition-colors">Privacy Policy</a>
+          <span class="w-1 h-1 bg-slate-600 rounded-full"></span>
+          <a href="#" id="footer-terms" class="hover:text-brand-primary transition-colors">Terms of Service</a>
         </div>
-
-        <!-- Back to Portfolio Button -->
-        <button onclick="document.getElementById('portfolio').scrollIntoView({ behavior: 'smooth' });" class="mt-20 p-4 rounded-full glass-panel hover:bg-white/10 transition-all group animate-bounce focus:outline-none focus:ring-2 focus:ring-brand-primary" aria-label="Back to Portfolio">
-          <svg class="w-6 h-6 text-white group-hover:-translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
-        </button>
       </div>
-    </section>
 
-    <!-- JavaScript Logic -->
-    <script>
-      // Team Data
-      // Team Data (Simulated DB)
-      const teamMembers = [
-        {
-          name: "Mohammed Hashim",
-          nameAr: "محمد هاشم",
-          role: "Team Leader",
-          roleAr: "قائد الفريق",
-          bio: "Visionary leader with a passion for innovative solutions and team synergy. Expert in strategic planning and full-stack architecture.",
-          bioAr: "قائد صاحب رؤية شغوف بالحلول المبتكرة وتآزر الفريق. خبير في التخطيط الاستراتيجي وهندسة البرمجيات المتكاملة.",
-          skills: ["Leadership", "Project Management", "System Architecture", "React/Node"],
-          skillsAr: ["القيادة", "إدارة المشاريع", "هندسة الأنظمة", "React/Node"],
-          social: ["twitter", "linkedin", "github"],
-          image: "./Team_Images/Leader_Image-removebg-preview.png",
-        },
-        {
-          name: "Ahmed Albtati",
-          nameAr: "أحمد البطاطي",
-          role: "Team Member",
-          roleAr: "عضو الفريق",
-          bio: "Creative frontend developer focused on crafting immersive user experiences. Specialist in responsive design and accessibility.",
-          bioAr: "مطور واجهات أمامية مبدع يركز على صياغة تجارب مستخدم غامرة. متخصص في التصميم المتجاوب وإمكانية الوصول.",
-          skills: ["Frontend Dev", "UI/UX Design", "Three.js", "Accessibility"],
-          skillsAr: ["تطوير الواجهات", "تصميم UI/UX", "Three.js", "إمكانية الوصول"],
-          social: ["linkedin", "dribbble"],
-          image: "https://ui-avatars.com/api/?name=Ahmed+Albtati&background=8b5cf6&color=fff&size=512&font-size=0.33",
-        },
-        {
-          name: "Khaled Bin Mahfouz",
-          nameAr: "خالد بن محفوظ",
-          role: "Team Member",
-          roleAr: "عضو الفريق",
-          bio: "Detail-oriented backend engineer ensuring robust and scalable server-side operations. Loves database optimization and cloud infrastructure.",
-          bioAr: "مهندس واجهات خلفية دقيق يضمن عمليات خادم قوية وقابلة للتطوير. محب لتحسين قواعد البيانات والبنية التحتية السحابية.",
-          skills: ["Backend Dev", "Database Design", "AWS", "Python"],
-          skillsAr: ["تطوير الخلفية", "تصميم قواعد البيانات", "AWS", "Python"],
-          social: ["github", "linkedin"],
-          image: "https://ui-avatars.com/api/?name=Khaled+Bin+Mahfouz&background=10b981&color=fff&size=512&font-size=0.33",
-        },
-        {
-          name: "Khallad Ghanem",
-          nameAr: "خلاد غانم",
-          role: "Team Member",
-          roleAr: "عضو الفريق",
-          bio: "Full-stack developer with a knack for solving complex algorithmic problems. Drives the technical core of our applications.",
-          bioAr: "مطور شامل لديه موهبة في حل المشكلات الخوارزمية المعقدة. يقود النواة التقنية لتطبيقاتنا.",
-          skills: ["Full Stack", "Algorithms", "DevOps", "Java"],
-          skillsAr: ["تطوير شامل", "الخوارزميات", "DevOps", "Java"],
-          social: ["github", "twitter"],
-          image: "https://ui-avatars.com/api/?name=Khallad+Ghanem&background=f59e0b&color=fff&size=512&font-size=0.33",
-        },
-      ];
+      <!-- Social Media Links -->
+      <div class="flex items-center gap-4 order-1 md:order-2">
+        <a href="#"
+          class="p-2 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 hover:-translate-y-1 hover:text-brand-primary transition-all duration-300 group"
+          aria-label="Twitter">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <path
+              d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.05c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z" />
+          </svg>
+        </a>
+        <a href="#"
+          class="p-2 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 hover:-translate-y-1 hover:text-brand-primary transition-all duration-300 group"
+          aria-label="LinkedIn">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <path
+              d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+          </svg>
+        </a>
+        <a href="#"
+          class="p-2 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 hover:-translate-y-1 hover:text-brand-primary transition-all duration-300 group"
+          aria-label="GitHub">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <path
+              d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+          </svg>
+        </a>
+      </div>
 
-      // State & Config
-      let currentIndex = 0;
-      let currentLang = 'en';
-      let isEditMode = false;
-      const totalSlides = teamMembers.length;
+    </div>
+  </footer>
 
-      // Initialize Theme
-      if (localStorage.getItem('theme') === 'light' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: light)').matches)) {
-        document.documentElement.classList.remove('dark');
+  <!-- JavaScript Logic -->
+  <script>
+    // Team Data
+    // Team Data (Simulated DB)
+    const teamMembers = [
+      {
+        name: "Mohammed Hashim",
+        nameAr: "محمد هاشم",
+        role: "Team Leader",
+        roleAr: "قائد الفريق",
+        bio: "Visionary leader with a passion for innovative solutions and team synergy. Expert in strategic planning and full-stack architecture.",
+        bioAr: "قائد صاحب رؤية شغوف بالحلول المبتكرة وتآزر الفريق. خبير في التخطيط الاستراتيجي وهندسة البرمجيات المتكاملة.",
+        skills: ["Leadership", "Project Management", "System Architecture", "React/Node"],
+        skillsAr: ["القيادة", "إدارة المشاريع", "هندسة الأنظمة", "React/Node"],
+        social: ["twitter", "linkedin", "github"],
+        image: "./Team_Images/Leader_Image-removebg-preview.png",
+      },
+      {
+        name: "Ahmed Albtati",
+        nameAr: "أحمد البطاطي",
+        role: "Team Member",
+        roleAr: "عضو الفريق",
+        bio: "Creative frontend developer focused on crafting immersive user experiences. Specialist in responsive design and accessibility.",
+        bioAr: "مطور واجهات أمامية مبدع يركز على صياغة تجارب مستخدم غامرة. متخصص في التصميم المتجاوب وإمكانية الوصول.",
+        skills: ["Frontend Dev", "UI/UX Design", "Three.js", "Accessibility"],
+        skillsAr: ["تطوير الواجهات", "تصميم UI/UX", "Three.js", "إمكانية الوصول"],
+        social: ["linkedin", "dribbble"],
+        image: "https://ui-avatars.com/api/?name=Ahmed+Albtati&background=8b5cf6&color=fff&size=512&font-size=0.33",
+      },
+      {
+        name: "Khaled Bin Mahfouz",
+        nameAr: "خالد بن محفوظ",
+        role: "Team Member",
+        roleAr: "عضو الفريق",
+        bio: "Detail-oriented backend engineer ensuring robust and scalable server-side operations. Loves database optimization and cloud infrastructure.",
+        bioAr: "مهندس واجهات خلفية دقيق يضمن عمليات خادم قوية وقابلة للتطوير. محب لتحسين قواعد البيانات والبنية التحتية السحابية.",
+        skills: ["Backend Dev", "Database Design", "AWS", "Python"],
+        skillsAr: ["تطوير الخلفية", "تصميم قواعد البيانات", "AWS", "Python"],
+        social: ["github", "linkedin"],
+        image: "https://ui-..com/api/?name=Khaled+Bin+Mahfouz&background=10b981&color=fff&size=512&font-size=0.33",
+      },
+      {
+        name: "Khallad Ghanem",
+        nameAr: "خلاد غانم",
+        role: "Team Member",
+        roleAr: "عضو الفريق",
+        bio: "Full-stack developer with a knack for solving complex algorithmic problems. Drives the technical core of our applications.",
+        bioAr: "مطور شامل لديه موهبة في حل المشكلات الخوارزمية المعقدة. يقود النواة التقنية لتطبيقاتنا.",
+        skills: ["Full Stack", "Algorithms", "DevOps", "Java"],
+        skillsAr: ["تطوير شامل", "الخوارزميات", "DevOps", "Java"],
+        social: ["github", "twitter"],
+        image: "./Team_Images/Khallad_Image-removebg-preview.png",
+      },
+    ];
+
+    // State & Config
+    let currentIndex = 0;
+    let currentLang = 'en';
+    let isEditMode = false;
+    const totalSlides = teamMembers.length;
+
+    // DOM Elements
+    const track = document.getElementById("carousel-track");
+    const paginationContainer = document.getElementById("pagination");
+    const prevBtn = document.getElementById("prev-btn");
+    const nextBtn = document.getElementById("next-btn");
+    const langBtn = document.getElementById("lang-btn");
+
+    // Toggle Language
+    function toggleLanguage() {
+      currentLang = currentLang === 'en' ? 'ar' : 'en';
+
+      // Update Document Attributes
+      document.documentElement.lang = currentLang;
+      document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+
+      // Update Font & Texts
+      const editBtnText = document.getElementById('edit-mode-text');
+
+      // Footer texts
+      const footerCopy = document.getElementById('footer-copy');
+      const footerPrivacy = document.getElementById('footer-privacy');
+      const footerTerms = document.getElementById('footer-terms');
+
+      if (currentLang === 'ar') {
+        document.body.classList.remove('font-sans');
+        document.body.classList.add('font-cairo');
+        langBtn.innerText = "English";
+        editBtnText.innerText = isEditMode ? 'إيقاف التعديل' : 'تعديل';
+
+        if (footerCopy) footerCopy.innerHTML = '&copy; 2026 محفظة الفريق. جميع الحقوق محفوظة.';
+        if (footerPrivacy) footerPrivacy.innerText = 'سياسة الخصوصية';
+        if (footerTerms) footerTerms.innerText = 'شروط الخدمة';
       } else {
-        document.documentElement.classList.add('dark');
+        document.body.classList.add('font-sans');
+        document.body.classList.remove('font-cairo');
+        langBtn.innerText = "العربية";
+        editBtnText.innerText = isEditMode ? 'Stop Edit' : 'Edit';
+
+        if (footerCopy) footerCopy.innerHTML = '&copy; 2026 Team Portfolio. All rights reserved.';
+        if (footerPrivacy) footerPrivacy.innerText = 'Privacy Policy';
+        if (footerTerms) footerTerms.innerText = 'Terms of Service';
       }
 
-      // Toggle Theme
-      function toggleTheme() {
-        if (document.documentElement.classList.contains('dark')) {
-          document.documentElement.classList.remove('dark');
-          localStorage.setItem('theme', 'light');
-        } else {
-          document.documentElement.classList.add('dark');
-          localStorage.setItem('theme', 'dark');
-        }
+      // Re-render content
+      if (typeof renderWelcome === 'function') renderWelcome();
+      renderSlides();
+      renderServices();
+
+      // Restore position and active state
+      goToSlide(currentIndex);
+    }
+
+    // Toggle Edit Mode
+    function toggleEditMode() {
+      isEditMode = !isEditMode;
+      const editBtnText = document.getElementById('edit-mode-text');
+      const editBtn = document.getElementById('edit-mode-btn');
+
+      if (isEditMode) {
+        editBtnText.innerText = currentLang === 'ar' ? 'إيقاف التعديل' : 'Stop Edit';
+        editBtn.classList.add('ring-2', 'ring-brand-primary', 'border-brand-primary');
+        editBtn.classList.remove('border-white/20');
+      } else {
+        editBtnText.innerText = currentLang === 'ar' ? 'تعديل' : 'Edit';
+        editBtn.classList.remove('ring-2', 'ring-brand-primary', 'border-brand-primary');
+        editBtn.classList.add('border-white/20');
       }
 
-      // DOM Elements
-      const track = document.getElementById("carousel-track");
-      const paginationContainer = document.getElementById("pagination");
-      const prevBtn = document.getElementById("prev-btn");
-      const nextBtn = document.getElementById("next-btn");
-      const langBtn = document.getElementById("lang-btn");
+      if (typeof renderWelcome === 'function') renderWelcome();
+      renderSlides();
+      renderServices();
+      goToSlide(currentIndex);
+    }
 
-      // Toggle Language
-      function toggleLanguage() {
-        currentLang = currentLang === 'en' ? 'ar' : 'en';
+    // Welcome Section Data & Logic
+    const welcomeData = {
+      title: "Welcome to Our Hub",
+      titleAr: "مرحباً بكم في مركزنا",
+      desc: "Discover a collective of innovative minds dedicated to crafting exceptional digital experiences. Explore our team, our work, and the services we offer.",
+      descAr: "اكتشف مجموعة من العقول المبتكرة المكرسة لصياغة تجارب رقمية استثنائية. استكشف فريقنا وأعمالنا والخدمات التي نقدمها.",
+      btn: "Meet The Team",
+      btnAr: "تعرف على الفريق"
+    };
+
+    function renderWelcome() {
+      const welcomeContainer = document.getElementById("welcome-content");
+      if (!welcomeContainer) return;
+
+      const isRTL = currentLang === 'ar';
+      const titleText = isRTL ? welcomeData.titleAr : welcomeData.title;
+      const descText = isRTL ? welcomeData.descAr : welcomeData.desc;
+      const btnText = isRTL ? welcomeData.btnAr : welcomeData.btn;
+
+      welcomeContainer.innerHTML = `
+        <h1 class="text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-primary to-brand-accent drop-shadow-sm transition-colors ${isEditMode ? 'hover:bg-black/5 dark:hover:bg-white/5 cursor-text focus:outline-none focus:ring-2 focus:ring-brand-primary rounded p-2' : ''}"
+            ${isEditMode ? 'contenteditable="true"' : ''}
+            onblur="updateWelcomeTitle(this.innerText)">
+          ${titleText}
+        </h1>
         
-        // Update Document Attributes
-        document.documentElement.lang = currentLang;
-        document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
-
-        // Update Font & Texts
-        const editBtnText = document.getElementById('edit-mode-text');
-        if (currentLang === 'ar') {
-            document.body.classList.remove('font-sans');
-            document.body.classList.add('font-cairo');
-            langBtn.innerText = "English";
-            editBtnText.innerText = isEditMode ? 'إيقاف التعديل' : 'تعديل';
-        } else {
-            document.body.classList.add('font-sans');
-            document.body.classList.remove('font-cairo');
-            langBtn.innerText = "العربية";
-            editBtnText.innerText = isEditMode ? 'Stop Edit' : 'Edit';
-        }
-
-        // Re-render content
-        renderSlides();
-        renderServices();
+        <p class="text-xl md:text-2xl text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl mx-auto transition-colors ${isEditMode ? 'cursor-text hover:bg-black/5 dark:hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-brand-primary rounded p-2' : ''}"
+            ${isEditMode ? 'contenteditable="true"' : ''}
+            onblur="updateWelcomeDesc(this.innerText)">
+          ${descText}
+        </p>
         
-        // Restore position and active state
-        goToSlide(currentIndex);
-      }
+        <div class="pt-8">
+          <button onclick="if(!isEditMode) document.getElementById('portfolio').scrollIntoView({ behavior: 'smooth' });" class="px-8 py-4 bg-brand-primary hover:bg-brand-primary/90 text-white rounded-full font-bold text-lg shadow-lg hover:shadow-brand-primary/50 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-primary dark:focus:ring-offset-brand-dark flex items-center gap-3 mx-auto ${!isEditMode ? 'hover:-translate-y-1' : ''}">
+            <span class="${isEditMode ? 'cursor-text focus:outline-none focus:ring-1 focus:ring-white/50 rounded px-2' : ''}"
+                  ${isEditMode ? 'contenteditable="true" onblur="updateWelcomeBtn(this.innerText)"' : ''}>
+              ${btnText}
+            </span>
+            <svg class="w-5 h-5 ${!isEditMode ? 'animate-bounce' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+          </button>
+        </div>
+      `;
+    }
 
-      // Toggle Edit Mode
-      function toggleEditMode() {
-        isEditMode = !isEditMode;
-        const editBtnText = document.getElementById('edit-mode-text');
-        const editBtn = document.getElementById('edit-mode-btn');
-        
-        if (isEditMode) {
-            editBtnText.innerText = currentLang === 'ar' ? 'إيقاف التعديل' : 'Stop Edit';
-            editBtn.classList.add('ring-2', 'ring-brand-primary', 'border-brand-primary');
-            editBtn.classList.remove('border-white/20');
-        } else {
-            editBtnText.innerText = currentLang === 'ar' ? 'تعديل' : 'Edit';
-            editBtn.classList.remove('ring-2', 'ring-brand-primary', 'border-brand-primary');
-            editBtn.classList.add('border-white/20');
-        }
+    function updateWelcomeTitle(text) {
+      if (currentLang === 'ar') welcomeData.titleAr = text.trim();
+      else welcomeData.title = text.trim();
+    }
 
-        renderSlides();
-        renderServices();
-        goToSlide(currentIndex);
-      }
+    function updateWelcomeDesc(text) {
+      if (currentLang === 'ar') welcomeData.descAr = text.trim();
+      else welcomeData.desc = text.trim();
+    }
 
-      
-      // Render Slides
-      function renderSlides() {
-        track.innerHTML = ""; // Clear existing
-        teamMembers.forEach((member, index) => {
-          const slide = document.createElement("article");
-          slide.className = `min-w-full h-full flex flex-col md:flex-row items-center justify-center p-6 md:p-20 gap-8 md:gap-16 opacity-100 transition-opacity duration-300 slide-item`;
-          slide.setAttribute("aria-hidden", index !== 0);
-          slide.dataset.index = index;
+    function updateWelcomeBtn(text) {
+      if (currentLang === 'ar') welcomeData.btnAr = text.trim();
+      else welcomeData.btn = text.trim();
+    }
 
-          // Localized Data
-          const name = currentLang === 'ar' ? member.nameAr : member.name;
-          const role = currentLang === 'ar' ? member.roleAr : member.role;
-          const bio = currentLang === 'ar' ? member.bioAr : member.bio;
-          const skills = currentLang === 'ar' ? member.skillsAr : member.skills;
-          const isRTL = currentLang === 'ar';
+    // Render Slides
+    function renderSlides() {
+      track.innerHTML = ""; // Clear existing
+      teamMembers.forEach((member, index) => {
+        const slide = document.createElement("article");
+        slide.className = `min-w-full h-full flex flex-col md:flex-row items-center justify-center p-6 md:p-20 gap-8 md:gap-16 opacity-100 transition-opacity duration-300 slide-item`;
+        slide.setAttribute("aria-hidden", index !== 0);
+        slide.dataset.index = index;
 
-          // For layout: In RTL mode, flex-row (no reverse) puts first child on Right.
-          // [Image, Text] -> Image Right, Text Left.
-          // This is usually correct.
-          // Text Alignment: need md:text-right or md:text-start. 
-          // Item alignment: md:items-start in Flex follows direction (Right in RTL).
-          
-          slide.innerHTML = `
+        // Localized Data
+        const name = currentLang === 'ar' ? member.nameAr : member.name;
+        const role = currentLang === 'ar' ? member.roleAr : member.role;
+        const bio = currentLang === 'ar' ? member.bioAr : member.bio;
+        const skills = currentLang === 'ar' ? member.skillsAr : member.skills;
+        const isRTL = currentLang === 'ar';
+
+        // For layout: In RTL mode, flex-row (no reverse) puts first child on Right.
+        // [Image, Text] -> Image Right, Text Left.
+        // This is usually correct.
+        // Text Alignment: need md:text-right or md:text-start. 
+        // Item alignment: md:items-start in Flex follows direction (Right in RTL).
+
+        slide.innerHTML = `
                     <!-- Pop-out Image Section -->
                     <div class="relative w-56 h-72 md:w-72 md:h-96 shrink-0 flex items-end justify-center slide-content-item delay-100 group">
                         
@@ -468,172 +570,172 @@
                         </div>
                     </div>
                 `;
-          track.appendChild(slide);
-        });
-      }
-
-      function renderPagination() {
-        teamMembers.forEach((_, index) => {
-          const dot = document.createElement("button");
-          dot.className = `w-3 h-3 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand-primary ${index === 0 ? "bg-brand-primary w-8" : "bg-black/20 dark:bg-white/30 hover:bg-black/40 dark:hover:bg-white/60"}`;
-          dot.ariaLabel = `Go to slide ${index + 1}`;
-          dot.onclick = () => goToSlide(index);
-          paginationContainer.appendChild(dot);
-        });
-      }
-
-      // Logic
-      function updateSlideClasses() {
-        const slides = document.querySelectorAll(".slide-item");
-        slides.forEach((slide, index) => {
-          if (index === currentIndex) {
-            slide.classList.add("active-slide");
-            slide.setAttribute("aria-hidden", "false");
-          } else {
-            slide.classList.remove("active-slide");
-            slide.setAttribute("aria-hidden", "true");
-          }
-        });
-
-        // Update Pagination
-        Array.from(paginationContainer.children).forEach((dot, index) => {
-          if (index === currentIndex) {
-            dot.className =
-              "w-8 h-3 rounded-full bg-brand-primary transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand-primary";
-          } else {
-            dot.className =
-              "w-3 h-3 rounded-full bg-black/20 dark:bg-white/30 hover:bg-black/40 dark:hover:bg-white/60 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand-primary";
-          }
-        });
-      }
-
-      function goToSlide(index) {
-        if (index < 0) index = totalSlides - 1;
-        if (index >= totalSlides) {
-            document.getElementById('services').scrollIntoView({ behavior: 'smooth' });
-            return;
-        }
-
-        currentIndex = index;
-        const isRTL = document.documentElement.dir === 'rtl';
-        const translateX = currentIndex * (isRTL ? 100 : -100);
-        track.style.transform = `translateX(${translateX}%)`;
-
-        // Trigger animations
-        updateSlideClasses();
-      }
-
-      // Event Listeners
-      prevBtn.addEventListener("click", () => {
-        const isRTL = document.documentElement.dir === 'rtl';
-        goToSlide(currentIndex + (isRTL ? 1 : -1));
+        track.appendChild(slide);
       });
-      nextBtn.addEventListener("click", () => {
-        const isRTL = document.documentElement.dir === 'rtl';
+    }
+
+    function renderPagination() {
+      teamMembers.forEach((_, index) => {
+        const dot = document.createElement("button");
+        dot.className = `w-3 h-3 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand-primary ${index === 0 ? "bg-brand-primary w-8" : "bg-white/30 hover:bg-white/60"}`;
+        dot.ariaLabel = `Go to slide ${index + 1}`;
+        dot.onclick = () => goToSlide(index);
+        paginationContainer.appendChild(dot);
+      });
+    }
+
+    // Logic
+    function updateSlideClasses() {
+      const slides = document.querySelectorAll(".slide-item");
+      slides.forEach((slide, index) => {
+        if (index === currentIndex) {
+          slide.classList.add("active-slide");
+          slide.setAttribute("aria-hidden", "false");
+        } else {
+          slide.classList.remove("active-slide");
+          slide.setAttribute("aria-hidden", "true");
+        }
+      });
+
+      // Update Pagination
+      Array.from(paginationContainer.children).forEach((dot, index) => {
+        if (index === currentIndex) {
+          dot.className =
+            "w-8 h-3 rounded-full bg-brand-primary transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand-primary";
+        } else {
+          dot.className =
+            "w-3 h-3 rounded-full bg-white/30 hover:bg-white/60 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand-primary";
+        }
+      });
+    }
+
+    function goToSlide(index) {
+      if (index < 0) index = totalSlides - 1;
+      if (index >= totalSlides) {
+        document.getElementById('services').scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+
+      currentIndex = index;
+      const isRTL = document.documentElement.dir === 'rtl';
+      const translateX = currentIndex * (isRTL ? 100 : -100);
+      track.style.transform = `translateX(${translateX}%)`;
+
+      // Trigger animations
+      updateSlideClasses();
+    }
+
+    // Event Listeners
+    prevBtn.addEventListener("click", () => {
+      const isRTL = document.documentElement.dir === 'rtl';
+      goToSlide(currentIndex + (isRTL ? 1 : -1));
+    });
+    nextBtn.addEventListener("click", () => {
+      const isRTL = document.documentElement.dir === 'rtl';
+      goToSlide(currentIndex + (isRTL ? -1 : 1));
+    });
+
+    // Keyboard Navigation
+    document.addEventListener("keydown", (e) => {
+      const isRTL = document.documentElement.dir === 'rtl';
+      if (e.key === "ArrowLeft") goToSlide(currentIndex + (isRTL ? 1 : -1));
+      if (e.key === "ArrowRight") goToSlide(currentIndex + (isRTL ? -1 : 1));
+    });
+
+    // Touch Navigation (Swipe)
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.addEventListener(
+      "touchstart",
+      (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      },
+      { passive: true },
+    ); // passive for better performance
+
+    document.addEventListener(
+      "touchend",
+      (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+      },
+      { passive: true },
+    );
+
+    function handleSwipe() {
+      const isRTL = document.documentElement.dir === 'rtl';
+      const threshold = 50; // min swipe distance
+      if (touchEndX < touchStartX - threshold) {
+        // Swiped Left
         goToSlide(currentIndex + (isRTL ? -1 : 1));
-      });
-
-      // Keyboard Navigation
-      document.addEventListener("keydown", (e) => {
-        const isRTL = document.documentElement.dir === 'rtl';
-        if (e.key === "ArrowLeft") goToSlide(currentIndex + (isRTL ? 1 : -1));
-        if (e.key === "ArrowRight") goToSlide(currentIndex + (isRTL ? -1 : 1));
-      });
-
-      // Touch Navigation (Swipe)
-      let touchStartX = 0;
-      let touchEndX = 0;
-
-      document.addEventListener(
-        "touchstart",
-        (e) => {
-          touchStartX = e.changedTouches[0].screenX;
-        },
-        { passive: true },
-      ); // passive for better performance
-
-      document.addEventListener(
-        "touchend",
-        (e) => {
-          touchEndX = e.changedTouches[0].screenX;
-          handleSwipe();
-        },
-        { passive: true },
-      );
-
-      function handleSwipe() {
-        const isRTL = document.documentElement.dir === 'rtl';
-        const threshold = 50; // min swipe distance
-        if (touchEndX < touchStartX - threshold) {
-          // Swiped Left
-          goToSlide(currentIndex + (isRTL ? -1 : 1));
-        }
-        if (touchEndX > touchStartX + threshold) {
-          // Swiped Right
-          goToSlide(currentIndex + (isRTL ? 1 : -1));
-        }
       }
-
-      // Inline Editing Data Handlers
-      function updateMemberRole(memberIdx, newRole) {
-        if (currentLang === 'ar') {
-            teamMembers[memberIdx].roleAr = newRole.trim();
-        } else {
-            teamMembers[memberIdx].role = newRole.trim();
-        }
+      if (touchEndX > touchStartX + threshold) {
+        // Swiped Right
+        goToSlide(currentIndex + (isRTL ? 1 : -1));
       }
+    }
 
-      function updateMemberBio(memberIdx, newBio) {
-        if (currentLang === 'ar') {
-            teamMembers[memberIdx].bioAr = newBio.trim();
-        } else {
-            teamMembers[memberIdx].bio = newBio.trim();
-        }
+    // Inline Editing Data Handlers
+    function updateMemberRole(memberIdx, newRole) {
+      if (currentLang === 'ar') {
+        teamMembers[memberIdx].roleAr = newRole.trim();
+      } else {
+        teamMembers[memberIdx].role = newRole.trim();
       }
+    }
 
-      function updateMemberSkill(memberIdx, skillIdx, newSkillText) {
-        if (currentLang === 'ar') {
-            teamMembers[memberIdx].skillsAr[skillIdx] = newSkillText.trim();
-        } else {
-            teamMembers[memberIdx].skills[skillIdx] = newSkillText.trim();
-        }
+    function updateMemberBio(memberIdx, newBio) {
+      if (currentLang === 'ar') {
+        teamMembers[memberIdx].bioAr = newBio.trim();
+      } else {
+        teamMembers[memberIdx].bio = newBio.trim();
       }
+    }
 
-      // Services Data and Logic
-      const servicesData = [
-        {
-          title: "Web Development",
-          titleAr: "تطوير الويب",
-          desc: "Building highly responsive and scalable web applications using modern technologies.",
-          descAr: "بناء تطبيقات ويب سريعة الاستجابة وقابلة للتطوير باستخدام تقنيات حديثة.",
-          icon: `<svg class="w-8 h-8 md:w-10 md:h-10 text-brand-primary transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>`
-        },
-        {
-          title: "UI/UX Design",
-          titleAr: "تصميم واجهة وتجربة المستخدم",
-          desc: "Crafting intuitive and immersive user experiences with a focus on human-centric design.",
-          descAr: "صياغة تجارب مستخدم بديهية وغامرة مع التركيز على التصميم المتمحور حول الإنسان.",
-          icon: `<svg class="w-8 h-8 md:w-10 md:h-10 text-brand-accent transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>`
-        },
-        {
-          title: "Cloud Architecture",
-          titleAr: "البنية التحتية السحابية",
-          desc: "Designing robust and secure backend systems optimized for high availability in the cloud.",
-          descAr: "تصميم أنظمة خلفية قوية وآمنة محسنة لتوافر الخدمة العالي في السحابة.",
-          icon: `<svg class="w-8 h-8 md:w-10 md:h-10 text-emerald-500 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>`
-        }
-      ];
+    function updateMemberSkill(memberIdx, skillIdx, newSkillText) {
+      if (currentLang === 'ar') {
+        teamMembers[memberIdx].skillsAr[skillIdx] = newSkillText.trim();
+      } else {
+        teamMembers[memberIdx].skills[skillIdx] = newSkillText.trim();
+      }
+    }
 
-      function renderServices() {
-        const grid = document.getElementById("services-grid");
-        const title = document.getElementById("services-title");
-        title.innerText = currentLang === 'ar' ? 'خدماتنا' : 'Our Services';
-        grid.innerHTML = "";
-        
-        servicesData.forEach((service, index) => {
-            const card = document.createElement("div");
-            card.className = "flip-card w-full h-[320px] perspective-1000 group z-10";
-            card.innerHTML = `
+    // Services Data and Logic
+    const servicesData = [
+      {
+        title: "Web Development",
+        titleAr: "تطوير الويب",
+        desc: "Building highly responsive and scalable web applications using modern technologies.",
+        descAr: "بناء تطبيقات ويب سريعة الاستجابة وقابلة للتطوير باستخدام تقنيات حديثة.",
+        icon: `<svg class="w-8 h-8 md:w-10 md:h-10 text-brand-primary transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>`
+      },
+      {
+        title: "UI/UX Design",
+        titleAr: "تصميم واجهة وتجربة المستخدم",
+        desc: "Crafting intuitive and immersive user experiences with a focus on human-centric design.",
+        descAr: "صياغة تجارب مستخدم بديهية وغامرة مع التركيز على التصميم المتمحور حول الإنسان.",
+        icon: `<svg class="w-8 h-8 md:w-10 md:h-10 text-brand-accent transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>`
+      },
+      {
+        title: "Cloud Architecture",
+        titleAr: "البنية التحتية السحابية",
+        desc: "Designing robust and secure backend systems optimized for high availability in the cloud.",
+        descAr: "تصميم أنظمة خلفية قوية وآمنة محسنة لتوافر الخدمة العالي في السحابة.",
+        icon: `<svg class="w-8 h-8 md:w-10 md:h-10 text-emerald-500 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>`
+      }
+    ];
+
+    function renderServices() {
+      const grid = document.getElementById("services-grid");
+      const title = document.getElementById("services-title");
+      title.innerText = currentLang === 'ar' ? 'خدماتنا' : 'Our Services';
+      grid.innerHTML = "";
+
+      servicesData.forEach((service, index) => {
+        const card = document.createElement("div");
+        card.className = "flip-card w-full h-[320px] perspective-1000 group z-10";
+        card.innerHTML = `
                 <div class="flip-card-inner relative w-full h-full shadow-xl rounded-2xl">
                     <!-- Front Side -->
                     <div class="flip-card-front absolute w-full h-full glass-panel p-8 rounded-2xl flex flex-col items-center justify-center overflow-hidden border border-white/10">
@@ -661,26 +763,28 @@
                     </div>
                 </div>
             `;
-            grid.appendChild(card);
-        });
-      }
+        grid.appendChild(card);
+      });
+    }
 
-      function updateServiceTitle(index, text) {
-        if (currentLang === 'ar') servicesData[index].titleAr = text.trim();
-        else servicesData[index].title = text.trim();
-      }
+    function updateServiceTitle(index, text) {
+      if (currentLang === 'ar') servicesData[index].titleAr = text.trim();
+      else servicesData[index].title = text.trim();
+    }
 
-      function updateServiceDesc(index, text) {
-        if (currentLang === 'ar') servicesData[index].descAr = text.trim();
-        else servicesData[index].desc = text.trim();
-      }
+    function updateServiceDesc(index, text) {
+      if (currentLang === 'ar') servicesData[index].descAr = text.trim();
+      else servicesData[index].desc = text.trim();
+    }
 
-      // Initialize
-      renderSlides();
-      renderPagination();
-      renderServices();
-      // Slight delay to trigger initial animation nicely
-      setTimeout(() => updateSlideClasses(), 50);
-    </script>
-  </body>
+    // Initialize
+    renderWelcome();
+    renderSlides();
+    renderPagination();
+    renderServices();
+    // Slight delay to trigger initial animation nicely
+    setTimeout(() => updateSlideClasses(), 50);
+  </script>
+</body>
+
 </html>
