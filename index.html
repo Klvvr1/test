@@ -21,6 +21,7 @@
 
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
@@ -44,8 +45,12 @@
   <style>
     /* Custom Styles for Utilities not in Tailwind by default */
     .glass-panel {
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(255, 255, 255, 0.5);
       backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    .dark .glass-panel {
+      background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
@@ -149,7 +154,7 @@
 </head>
 
 <body
-  class="bg-brand-dark text-white font-sans overflow-x-hidden antialiased selection:bg-brand-primary selection:text-white">
+  class="bg-slate-50 dark:bg-brand-dark text-slate-900 dark:text-white font-sans overflow-x-hidden antialiased selection:bg-brand-primary selection:text-white transition-colors duration-300">
   <!-- Scroll Progress Indicator -->
   <div id="scroll-progress"></div>
 
@@ -162,9 +167,15 @@
 
   <!-- Top Right Controls (Fixed so it accompanies entire scroll) -->
   <div class="fixed top-6 right-6 z-50 flex items-center gap-3">
+    <!-- Theme Toggle Button -->
+    <button id="theme-btn" onclick="toggleTheme()"
+      class="p-2 bg-white/50 dark:bg-white/10 backdrop-blur-md border border-slate-300 dark:border-white/20 rounded-full text-slate-900 dark:text-white hover:bg-white/80 dark:hover:bg-white/20 transition-all shadow-lg flex items-center justify-center">
+      <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+      <svg class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+    </button>
     <!-- Edit Mode Toggle Button -->
     <button id="edit-mode-btn" onclick="toggleEditMode()"
-      class="px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-sm font-bold text-white hover:bg-white/20 transition-all shadow-lg flex items-center gap-2">
+      class="px-4 py-2 bg-white/50 dark:bg-white/10 backdrop-blur-md border border-slate-300 dark:border-white/20 rounded-full text-sm font-bold text-slate-900 dark:text-white hover:bg-white/80 dark:hover:bg-white/20 transition-all shadow-lg flex items-center gap-2">
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
           d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
@@ -173,14 +184,14 @@
     </button>
     <!-- Language Toggle Button -->
     <button id="lang-btn" onclick="toggleLanguage()"
-      class="px-5 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-sm font-bold text-white hover:bg-white/20 transition-all font-cairo shadow-lg">
+      class="px-5 py-2 bg-white/50 dark:bg-white/10 backdrop-blur-md border border-slate-300 dark:border-white/20 rounded-full text-sm font-bold text-slate-900 dark:text-white hover:bg-white/80 dark:hover:bg-white/20 transition-all font-cairo shadow-lg">
       العربية
     </button>
   </div>
 
   <!-- Welcome Section -->
   <section id="welcome"
-    class="relative min-h-screen w-full flex flex-col items-center justify-center px-6 md:px-20 py-20 z-10 border-b border-black/10 dark:border-white/10">
+    class="relative min-h-screen w-full flex flex-col items-center justify-center px-6 md:px-20 py-20 z-10 border-b border-slate-200 dark:border-white/10 bg-white/50 dark:bg-transparent transition-colors duration-300">
     <!-- Glow background -->
     <div
       class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-primary/20 rounded-full blur-[120px] mix-blend-screen pointer-events-none animate-float">
@@ -214,18 +225,18 @@
 
     <!-- Navigation Controls -->
     <button id="prev-btn"
-      class="nav-btn absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 p-4 rounded-full glass-panel hover:bg-white/10 transition-all duration-300 group focus:outline-none focus:ring-2 focus:ring-brand-primary"
+      class="nav-btn absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 p-4 rounded-full glass-panel hover:bg-white/50 dark:hover:bg-white/10 transition-all duration-300 group focus:outline-none focus:ring-2 focus:ring-brand-primary"
       aria-label="Previous Slide">
-      <svg class="arrow-icon w-6 h-6 md:w-8 md:h-8 text-white transition-transform duration-300" fill="none"
+      <svg class="arrow-icon w-6 h-6 md:w-8 md:h-8 text-slate-900 dark:text-white transition-transform duration-300" fill="none"
         stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
       </svg>
     </button>
 
     <button id="next-btn"
-      class="nav-btn absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 p-4 rounded-full glass-panel hover:bg-white/10 transition-all duration-300 group focus:outline-none focus:ring-2 focus:ring-brand-primary"
+      class="nav-btn absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 p-4 rounded-full glass-panel hover:bg-white/50 dark:hover:bg-white/10 transition-all duration-300 group focus:outline-none focus:ring-2 focus:ring-brand-primary"
       aria-label="Next Slide">
-      <svg class="arrow-icon w-6 h-6 md:w-8 md:h-8 text-white transition-transform duration-300" fill="none"
+      <svg class="arrow-icon w-6 h-6 md:w-8 md:h-8 text-slate-900 dark:text-white transition-transform duration-300" fill="none"
         stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
       </svg>
@@ -239,7 +250,7 @@
 
   <!-- Services Section -->
   <section id="services"
-    class="min-h-screen w-full bg-brand-dark py-20 px-6 md:px-20 relative flex flex-col items-center justify-center border-t border-white/10 z-10">
+    class="min-h-screen w-full bg-slate-50 dark:bg-brand-dark py-20 px-6 md:px-20 relative flex flex-col items-center justify-center border-t border-slate-200 dark:border-white/10 z-10 transition-colors duration-300">
     <!-- Glow background -->
     <div
       class="absolute top-0 right-0 w-[40%] h-[40%] bg-brand-accent/10 rounded-full blur-[100px] pointer-events-none">
@@ -247,7 +258,7 @@
 
     <div class="relative z-10 w-full max-w-6xl mx-auto flex flex-col items-center">
       <h2 id="services-title"
-        class="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60 text-center">
+        class="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-500 dark:from-white dark:to-white/60 text-center">
         Our Services
       </h2>
       <div id="services-subtitle" class="w-20 h-1 bg-brand-primary rounded-full mb-16"></div>
@@ -258,9 +269,9 @@
 
       <!-- Back to Portfolio Button -->
       <button onclick="document.getElementById('portfolio').scrollIntoView({ behavior: 'smooth' });"
-        class="mt-20 p-4 rounded-full glass-panel hover:bg-white/10 transition-all group animate-bounce focus:outline-none focus:ring-2 focus:ring-brand-primary"
+        class="mt-20 p-4 rounded-full glass-panel hover:bg-white/50 dark:hover:bg-white/10 transition-all group animate-bounce focus:outline-none focus:ring-2 focus:ring-brand-primary"
         aria-label="Back to Portfolio">
-        <svg class="w-6 h-6 text-white group-hover:-translate-y-1 transition-transform" fill="none"
+        <svg class="w-6 h-6 text-slate-900 dark:text-white group-hover:-translate-y-1 transition-transform" fill="none"
           stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
         </svg>
@@ -269,7 +280,7 @@
   </section>
 
   <!-- Footer Section -->
-  <footer id="main-footer" class="w-full bg-brand-dark border-t border-white/10 py-10 px-6 md:px-20 relative z-10">
+  <footer id="main-footer" class="w-full bg-slate-50 dark:bg-brand-dark border-t border-slate-200 dark:border-white/10 py-10 px-6 md:px-20 relative z-10 transition-colors duration-300">
     <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
 
       <!-- Copyright & Legal -->
@@ -286,7 +297,7 @@
       <!-- Social Media Links -->
       <div class="flex items-center gap-4 order-1 md:order-2">
         <a href="#"
-          class="p-2 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 hover:-translate-y-1 hover:text-brand-primary transition-all duration-300 group"
+          class="p-2 bg-slate-200 dark:bg-white/5 border border-slate-300 dark:border-white/10 rounded-full hover:bg-slate-300 dark:hover:bg-white/10 hover:-translate-y-1 hover:text-brand-primary transition-all duration-300 group text-slate-700 dark:text-white"
           aria-label="Twitter">
           <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
             <path
@@ -294,7 +305,7 @@
           </svg>
         </a>
         <a href="#"
-          class="p-2 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 hover:-translate-y-1 hover:text-brand-primary transition-all duration-300 group"
+          class="p-2 bg-slate-200 dark:bg-white/5 border border-slate-300 dark:border-white/10 rounded-full hover:bg-slate-300 dark:hover:bg-white/10 hover:-translate-y-1 hover:text-brand-primary transition-all duration-300 group text-slate-700 dark:text-white"
           aria-label="LinkedIn">
           <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
             <path
@@ -302,7 +313,7 @@
           </svg>
         </a>
         <a href="#"
-          class="p-2 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 hover:-translate-y-1 hover:text-brand-primary transition-all duration-300 group"
+          class="p-2 bg-slate-200 dark:bg-white/5 border border-slate-300 dark:border-white/10 rounded-full hover:bg-slate-300 dark:hover:bg-white/10 hover:-translate-y-1 hover:text-brand-primary transition-all duration-300 group text-slate-700 dark:text-white"
           aria-label="GitHub">
           <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
             <path
@@ -324,6 +335,7 @@
     var currentIndex = 0;
     var currentLang = 'en';
     var isEditMode = false;
+    var isDarkMode = true;
     var totalSlides = 0;
     var STORAGE_KEY = 'portfolio_data_v1';
 
@@ -336,7 +348,8 @@
                 servicesData,
                 currentLang,
                 isEditMode,
-                currentIndex
+                currentIndex,
+                isDarkMode
             };
             localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
         } catch (e) {
@@ -355,6 +368,7 @@
                 if (data.currentLang) currentLang = data.currentLang;
                 if (typeof data.isEditMode !== 'undefined') isEditMode = data.isEditMode;
                 if (typeof data.currentIndex !== 'undefined') currentIndex = data.currentIndex;
+                if (typeof data.isDarkMode !== 'undefined') isDarkMode = data.isDarkMode;
                 console.log("Data loaded successfully.");
             } catch (e) {
                 console.error("Load failed:", e);
@@ -479,22 +493,22 @@
                 <div class="relative w-56 h-72 md:w-72 md:h-96 shrink-0 flex items-end justify-center group slide-content-item">
                     <div class="absolute bottom-0 w-full aspect-square bg-brand-primary/20 rounded-full blur-3xl opacity-50"></div>
                     <img src="${member.image}" alt="${name}" class="relative z-10 w-full h-[120%] object-cover object-top rounded-b-full drop-shadow-xl">
-                    <div class="absolute bottom-4 ${isRTL ? 'left-4' : 'right-4'} z-20 bg-white/80 dark:bg-white/10 backdrop-blur-md p-2 rounded-xl text-xs font-mono font-bold text-brand-primary">
+                    <div class="absolute bottom-4 ${isRTL ? 'left-4' : 'right-4'} z-20 bg-white/80 dark:bg-white/10 backdrop-blur-md p-2 rounded-xl text-xs font-mono font-bold text-brand-primary shadow-sm dark:shadow-none">
                         ${index + 1} / ${totalSlides}
                     </div>
                 </div>
                 <div class="flex flex-col items-center md:items-start text-center ${isRTL ? 'md:text-right' : 'md:text-left'} max-w-2xl space-y-6">
-                    <span class="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-sm font-semibold uppercase text-brand-primary"
+                    <span class="inline-block px-4 py-1.5 rounded-full bg-slate-200 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-sm font-semibold uppercase text-brand-primary"
                           ${isEditMode ? 'contenteditable="true" onblur="updateMemberRole('+index+', this.innerText)" class="cursor-text"' : ''}>
                         ${role}
                     </span>
-                    <h1 class="text-4xl md:text-6xl font-bold text-white">${name}</h1>
-                    <p class="text-lg text-slate-400 leading-relaxed"
+                    <h1 class="text-4xl md:text-6xl font-bold text-slate-900 dark:text-white">${name}</h1>
+                    <p class="text-lg text-slate-600 dark:text-slate-400 leading-relaxed"
                        ${isEditMode ? 'contenteditable="true" onblur="updateMemberBio('+index+', this.innerText)" class="cursor-text"' : ''}>
                         ${bio}
                     </p>
                     <div class="flex flex-wrap justify-center md:justify-start gap-2">
-                        ${skills.map((s, si) => `<span class="px-3 py-1 bg-white/5 rounded-lg text-sm border border-white/10 hover:text-brand-primary transition-colors" ${isEditMode ? 'contenteditable="true" onblur="updateMemberSkill('+index+','+si+', this.innerText)" class="cursor-text"' : ''}>${s}</span>`).join('')}
+                        ${skills.map((s, si) => `<span class="px-3 py-1 bg-slate-100 dark:bg-white/5 rounded-lg text-sm border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:text-brand-primary transition-colors" ${isEditMode ? 'contenteditable="true" onblur="updateMemberSkill('+index+','+si+', this.innerText)" class="cursor-text"' : ''}>${s}</span>`).join('')}
                     </div>
                 </div>
             `;
@@ -508,7 +522,7 @@
         container.innerHTML = "";
         teamMembers.forEach((_, index) => {
             const dot = document.createElement("button");
-            dot.className = `w-3 h-3 rounded-full transition-all duration-300 ${index === currentIndex ? "bg-brand-primary w-8" : "bg-white/30 hover:bg-white/60"}`;
+            dot.className = `w-3 h-3 rounded-full transition-all duration-300 ${index === currentIndex ? "bg-brand-primary w-8" : "bg-slate-300 dark:bg-white/30 hover:bg-slate-400 dark:hover:bg-white/60"}`;
             dot.onclick = () => goToSlide(index);
             container.appendChild(dot);
         });
@@ -525,18 +539,18 @@
             card.className = "flip-card w-full h-[320px] perspective-1000 group z-10";
             card.innerHTML = `
                 <div class="flip-card-inner relative w-full h-full shadow-xl rounded-2xl group-hover:shadow-brand-primary/20">
-                    <div class="flip-card-front absolute w-full h-full glass-panel p-8 rounded-2xl flex flex-col items-center justify-center overflow-hidden border border-white/10 group-hover:border-brand-primary/30 transition-colors">
-                        <div class="absolute top-0 ${currentLang==='ar'?'left-0 rounded-br-[100px]':'right-0 rounded-bl-[100px]'} w-32 h-32 bg-white/5 flex items-start justify-center p-4 transition-all group-hover:bg-brand-primary/20 group-hover:scale-110">
+                    <div class="flip-card-front absolute w-full h-full glass-panel p-8 rounded-2xl flex flex-col items-center justify-center overflow-hidden border border-slate-200 dark:border-white/10 group-hover:border-brand-primary/30 transition-colors">
+                        <div class="absolute top-0 ${currentLang==='ar'?'left-0 rounded-br-[100px]':'right-0 rounded-bl-[100px]'} w-32 h-32 bg-slate-100 dark:bg-white/5 flex items-start justify-center p-4 transition-all group-hover:bg-brand-primary/20 group-hover:scale-110">
                             ${service.icon}
                         </div>
-                        <h3 class="relative z-10 text-3xl font-bold text-white text-center"
-                            ${isEditMode ? 'contenteditable="true" onblur="updateServiceTitle('+index+', this.innerText)" class="cursor-text hover:bg-white/10 p-2 rounded"' : ''}>
+                        <h3 class="relative z-10 text-3xl font-bold text-slate-900 dark:text-white text-center"
+                            ${isEditMode ? 'contenteditable="true" onblur="updateServiceTitle('+index+', this.innerText)" class="cursor-text hover:bg-slate-100 dark:hover:bg-white/10 p-2 rounded"' : ''}>
                             ${currentLang === 'ar' ? service.titleAr : service.title}
                         </h3>
                     </div>
-                    <div class="flip-card-back absolute w-full h-full glass-panel p-8 rounded-2xl flex flex-col items-center justify-center text-center shadow-2xl border border-white/10">
+                    <div class="flip-card-back absolute w-full h-full glass-panel p-8 rounded-2xl flex flex-col items-center justify-center text-center shadow-xl border border-slate-200 dark:border-white/10">
                         <div class="w-12 h-1 mb-6 bg-brand-primary rounded-full"></div>
-                        <p class="text-slate-300 text-lg leading-relaxed"
+                        <p class="text-slate-700 dark:text-slate-300 text-lg leading-relaxed"
                            ${isEditMode ? 'contenteditable="true" onblur="updateServiceDesc('+index+', this.innerText)" class="cursor-text"' : ''}>
                             ${currentLang === 'ar' ? service.descAr : service.desc}
                         </p>
@@ -588,6 +602,11 @@
     function syncLayout() {
         document.documentElement.lang = currentLang;
         document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+        if (isDarkMode) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
         const lb = document.getElementById("lang-btn");
         const et = document.getElementById('edit-mode-text');
         if (currentLang === 'ar') {
@@ -607,6 +626,12 @@
         isEditMode = !isEditMode;
         syncLayout();
         renderAll();
+        saveToStorage();
+    }
+
+    function toggleTheme() {
+        isDarkMode = !isDarkMode;
+        syncLayout();
         saveToStorage();
     }
 
